@@ -104,6 +104,16 @@ export default {
           "0%": { backgroundPosition: "-200% center" },
           "100%": { backgroundPosition: "200% center" },
         },
+        particle: {
+          "0%": { transform: "translateY(100vh) rotate(0deg)", opacity: "0" },
+          "10%": { opacity: "1" },
+          "90%": { opacity: "1" },
+          "100%": { transform: "translateY(-100vh) rotate(720deg)", opacity: "0" },
+        },
+        "halo-pulse": {
+          "0%, 100%": { transform: "scale(1)", opacity: "0.6" },
+          "50%": { transform: "scale(1.1)", opacity: "0.3" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -111,6 +121,8 @@ export default {
         float: "float 6s ease-in-out infinite",
         "pulse-glow": "pulse-glow 3s ease-in-out infinite",
         shimmer: "shimmer 3s ease-in-out infinite",
+        particle: "particle linear infinite",
+        "halo-pulse": "halo-pulse 4s ease-in-out infinite",
       },
     },
   },
