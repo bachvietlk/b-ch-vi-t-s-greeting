@@ -8,6 +8,8 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useToast } from "@/hooks/use-toast";
+import { useLightScore } from "@/hooks/useLightScore";
+import LightScoreDisplay from "@/components/LightScoreDisplay";
 import {
   Sparkles,
   Send,
@@ -23,6 +25,7 @@ import {
   Coins,
   RefreshCw,
   Flower2,
+  Zap,
 } from "lucide-react";
 import ParticleField from "@/components/ParticleField";
 
@@ -53,6 +56,9 @@ const Chat = () => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
   const { toast } = useToast();
+  
+  // Light Score hook
+  const { score, boost, addPoints, calculateMessagePoints } = useLightScore(user);
 
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
@@ -100,6 +106,9 @@ const Chat = () => {
     const newMessages: Message[] = [...messages, { role: "user", content: userMessage }];
     setMessages(newMessages);
     setIsLoading(true);
+
+    // Calculate and add light score points for the user message
+    const points = calculateMessagePoints(userMessage);
 
     try {
       const response = await fetch(
@@ -169,6 +178,10 @@ const Chat = () => {
           }
         }
       }
+
+      // Add points after successful response
+      addPoints(points);
+      
     } catch (error: any) {
       console.error("Chat error:", error);
       toast({
@@ -285,7 +298,7 @@ const Chat = () => {
         {/* Main Chat Area */}
         <div className="flex-1 flex flex-col relative z-10">
           {/* Header */}
-          <header className="h-16 border-b border-border/50 flex items-center justify-between px-4 backdrop-blur-sm bg-background/80">
+          <header className="h-auto min-h-[64px] border-b border-border/50 flex flex-wrap items-center justify-between px-4 py-2 gap-2 backdrop-blur-sm bg-background/80">
             <div className="flex items-center gap-3">
               <Button
                 variant="ghost"
@@ -299,13 +312,23 @@ const Chat = () => {
                 <span className="font-semibold text-gradient-gold">Angel AI</span>
               </div>
             </div>
-            <div className="flex items-center gap-2">
+            
+            {/* Light Score in Header */}
+            <div className="flex items-center gap-3">
+              <div className="hidden sm:block">
+                <LightScoreDisplay score={score} boost={boost} />
+              </div>
               <Button variant="ghost" size="icon" onClick={() => navigate("/")}>
                 <Home className="w-5 h-5" />
               </Button>
               <Button variant="ghost" size="icon" onClick={handleLogout}>
                 <LogOut className="w-5 h-5" />
               </Button>
+            </div>
+            
+            {/* Mobile Light Score */}
+            <div className="w-full sm:hidden">
+              <LightScoreDisplay score={score} boost={boost} />
             </div>
           </header>
 
