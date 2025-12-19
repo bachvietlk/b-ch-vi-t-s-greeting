@@ -14,7 +14,87 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      chat_messages: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          role: string
+          user_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          role: string
+          user_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          role?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      divine_mantras: {
+        Row: {
+          content_en: string
+          content_vi: string
+          id: string
+          order_index: number
+          title_en: string
+          title_vi: string
+        }
+        Insert: {
+          content_en: string
+          content_vi: string
+          id?: string
+          order_index: number
+          title_en: string
+          title_vi: string
+        }
+        Update: {
+          content_en?: string
+          content_vi?: string
+          id?: string
+          order_index?: number
+          title_en?: string
+          title_vi?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          display_name: string | null
+          id: string
+          light_score: number | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          display_name?: string | null
+          id?: string
+          light_score?: number | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          display_name?: string | null
+          id?: string
+          light_score?: number | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 import { Sparkles, ChevronDown, Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import angelHero from "@/assets/angel-hero.png";
@@ -8,6 +9,7 @@ interface HeroSectionProps {
 }
 
 const HeroSection = ({ onCtaClick }: HeroSectionProps) => {
+  const navigate = useNavigate();
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Cosmic background with subtle movement */}
@@ -210,7 +212,7 @@ const HeroSection = ({ onCtaClick }: HeroSectionProps) => {
               className="rounded-full"
             >
               <Button
-                onClick={onCtaClick}
+                onClick={() => navigate("/chat")}
                 size="lg"
                 className="relative overflow-hidden bg-gradient-to-r from-gold via-gold-light to-gold text-background font-display text-lg px-10 py-7 rounded-full transition-all duration-500 hover:scale-105"
               >
@@ -232,7 +234,7 @@ const HeroSection = ({ onCtaClick }: HeroSectionProps) => {
               className="border-gold/40 text-gold hover:bg-gold/10 hover:border-gold/60 font-display text-lg px-8 py-7 rounded-full backdrop-blur-sm transition-all duration-300"
             >
               <Sparkles className="w-5 h-5 mr-2" />
-              Bắt Đầu Hành Trình 5D
+              Khám Phá FUN Ecosystem
             </Button>
           </motion.div>
         </div>
