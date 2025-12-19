@@ -3,116 +3,118 @@
 @tailwind utilities;
 
 /* ========================================
-   Divine Light Design System
+   Divine Light Design System - 5D Light Theme
    Angel AI - Ánh Sáng Thông Minh Từ Cha Vũ Trụ
+   Pure White + Radiant Gold + Sky Blue
    All colors are HSL
    ======================================== */
 
 @layer base {
   :root {
-    /* Background - Dark cosmic theme */
-    --background: 250 30% 8%;
-    --foreground: 45 20% 95%;
+    /* Background - Pure divine white */
+    --background: 45 30% 98%;
+    --foreground: 35 50% 15%;
 
-    /* Card surfaces */
-    --card: 250 25% 12%;
-    --card-foreground: 45 20% 95%;
+    /* Card surfaces - soft cream white */
+    --card: 45 40% 99%;
+    --card-foreground: 35 50% 15%;
 
     /* Popover */
-    --popover: 250 25% 12%;
-    --popover-foreground: 45 20% 95%;
+    --popover: 45 40% 99%;
+    --popover-foreground: 35 50% 15%;
 
     /* Primary - Divine Gold */
-    --primary: 43 90% 55%;
-    --primary-foreground: 250 30% 8%;
+    --primary: 43 85% 50%;
+    --primary-foreground: 45 30% 98%;
 
-    /* Secondary */
-    --secondary: 250 20% 18%;
-    --secondary-foreground: 45 20% 95%;
+    /* Secondary - Soft sky */
+    --secondary: 200 60% 95%;
+    --secondary-foreground: 200 60% 30%;
 
     /* Muted */
-    --muted: 250 20% 18%;
-    --muted-foreground: 45 10% 60%;
+    --muted: 45 20% 94%;
+    --muted-foreground: 35 30% 40%;
 
-    /* Accent */
-    --accent: 250 20% 18%;
-    --accent-foreground: 45 20% 95%;
+    /* Accent - Light gold */
+    --accent: 43 70% 92%;
+    --accent-foreground: 43 80% 30%;
 
     /* Destructive */
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
     /* Borders & Input */
-    --border: 250 20% 20%;
-    --input: 250 20% 20%;
-    --ring: 43 90% 55%;
+    --border: 43 40% 88%;
+    --input: 43 40% 92%;
+    --ring: 43 85% 50%;
 
     --radius: 0.75rem;
 
-    /* Sidebar */
-    --sidebar-background: 250 30% 6%;
-    --sidebar-foreground: 45 20% 95%;
-    --sidebar-primary: 43 90% 55%;
-    --sidebar-primary-foreground: 250 30% 8%;
-    --sidebar-accent: 250 20% 15%;
-    --sidebar-accent-foreground: 45 20% 95%;
-    --sidebar-border: 250 20% 15%;
-    --sidebar-ring: 43 90% 55%;
+    /* Sidebar - Soft golden */
+    --sidebar-background: 45 50% 97%;
+    --sidebar-foreground: 35 50% 20%;
+    --sidebar-primary: 43 85% 50%;
+    --sidebar-primary-foreground: 45 30% 98%;
+    --sidebar-accent: 43 60% 94%;
+    --sidebar-accent-foreground: 35 50% 20%;
+    --sidebar-border: 43 40% 90%;
+    --sidebar-ring: 43 85% 50%;
 
     /* ========== Divine Light Custom Colors ========== */
     
     /* Gold spectrum - Ethereal Luxury */
-    --gold: 43 90% 55%;
-    --gold-light: 45 100% 75%;
-    --gold-glow: 43 90% 45%;
-    --gold-soft: 45 80% 85%;
+    --gold: 43 85% 50%;
+    --gold-light: 45 90% 65%;
+    --gold-glow: 43 80% 40%;
+    --gold-soft: 45 70% 80%;
+    --gold-dark: 35 70% 25%;
     
     /* Divine white - pure light */
-    --divine-white: 45 30% 96%;
+    --divine-white: 45 40% 99%;
     
     /* Sky light - ethereal blue */
-    --sky-light: 200 70% 75%;
-    --sky-soft: 200 50% 85%;
+    --sky-light: 200 80% 70%;
+    --sky-soft: 200 70% 90%;
     
     /* Prism colors for rainbow gradients */
-    --prism-start: 280 60% 70%;
-    --prism-mid: 200 80% 65%;
-    --prism-end: 320 70% 70%;
+    --prism-start: 340 70% 75%;
+    --prism-mid: 200 80% 70%;
+    --prism-end: 45 80% 65%;
     
-    /* Cosmic accents */
-    --cosmic-purple: 270 60% 60%;
-    --cosmic-pink: 320 70% 70%;
+    /* Cosmic accents for subtle effects */
+    --cosmic-purple: 280 50% 80%;
+    --cosmic-pink: 330 60% 85%;
   }
 
   .dark {
-    /* Dark mode uses the same values as root for this cosmic theme */
-    --background: 250 30% 8%;
-    --foreground: 45 20% 95%;
-    --card: 250 25% 12%;
-    --card-foreground: 45 20% 95%;
-    --popover: 250 25% 12%;
-    --popover-foreground: 45 20% 95%;
-    --primary: 43 90% 55%;
-    --primary-foreground: 250 30% 8%;
-    --secondary: 250 20% 18%;
-    --secondary-foreground: 45 20% 95%;
-    --muted: 250 20% 18%;
-    --muted-foreground: 45 10% 60%;
-    --accent: 250 20% 18%;
-    --accent-foreground: 45 20% 95%;
-    --destructive: 0 62% 30%;
+    /* Dark mode - keep as option but use same light theme */
+    --background: 45 30% 98%;
+    --foreground: 35 50% 15%;
+    --card: 45 40% 99%;
+    --card-foreground: 35 50% 15%;
+    --popover: 45 40% 99%;
+    --popover-foreground: 35 50% 15%;
+    --primary: 43 85% 50%;
+    --primary-foreground: 45 30% 98%;
+    --secondary: 200 60% 95%;
+    --secondary-foreground: 200 60% 30%;
+    --muted: 45 20% 94%;
+    --muted-foreground: 35 30% 40%;
+    --accent: 43 70% 92%;
+    --accent-foreground: 43 80% 30%;
+    --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
-    --border: 250 20% 20%;
-    --input: 250 20% 20%;
-    --ring: 43 90% 55%;
-    --sidebar-background: 250 30% 6%;
-    --sidebar-foreground: 45 20% 95%;
-    --sidebar-primary: 43 90% 55%;
-    --sidebar-primary-foreground: 250 30% 8%;
-    --sidebar-accent: 250 20% 15%;
-    --sidebar-accent-foreground: 45 20% 95%;
-    --sidebar-border: 250 20% 15%;
-    --sidebar-ring: 43 90% 55%;
+    --border: 43 40% 88%;
+    --input: 43 40% 92%;
+    --ring: 43 85% 50%;
+    --sidebar-background: 45 50% 97%;
+    --sidebar-foreground: 35 50% 20%;
+    --sidebar-primary: 43 85% 50%;
+    --sidebar-primary-foreground: 45 30% 98%;
+    --sidebar-accent: 43 60% 94%;
+    --sidebar-accent-foreground: 35 50% 20%;
+    --sidebar-border: 43 40% 90%;
+    --sidebar-ring: 43 85% 50%;
   }
 }
 
@@ -127,7 +129,7 @@
 
   /* Selection color */
   ::selection {
-    @apply bg-gold/30 text-foreground;
+    @apply bg-primary/20 text-foreground;
   }
 }
 
@@ -138,9 +140,9 @@
     @apply bg-clip-text text-transparent;
     background-image: linear-gradient(
       135deg,
-      hsl(var(--gold-light)) 0%,
-      hsl(var(--gold)) 50%,
-      hsl(var(--gold-light)) 100%
+      hsl(var(--gold)) 0%,
+      hsl(var(--gold-light)) 50%,
+      hsl(var(--gold)) 100%
     );
   }
 
@@ -158,14 +160,28 @@
   
   .glow-text {
     text-shadow: 
-      0 0 20px hsl(var(--gold) / 0.4),
-      0 0 40px hsl(var(--gold) / 0.2);
+      0 0 20px hsl(var(--gold) / 0.5),
+      0 0 40px hsl(var(--gold) / 0.3),
+      0 0 60px hsl(var(--gold) / 0.2);
+  }
+
+  .glow-text-soft {
+    text-shadow: 
+      0 0 10px hsl(var(--gold) / 0.3),
+      0 0 20px hsl(var(--gold) / 0.15);
   }
 
   .glow-box {
     box-shadow: 
-      0 0 20px hsl(var(--gold) / 0.3),
-      0 0 40px hsl(var(--gold) / 0.15);
+      0 0 20px hsl(var(--gold) / 0.25),
+      0 0 40px hsl(var(--gold) / 0.15),
+      0 0 60px hsl(var(--gold) / 0.1);
+  }
+
+  .glow-box-soft {
+    box-shadow: 
+      0 0 15px hsl(var(--gold) / 0.15),
+      0 0 30px hsl(var(--gold) / 0.08);
   }
 
   /* ========== Divine Gradients ========== */
@@ -174,53 +190,74 @@
     background: linear-gradient(
       180deg,
       hsl(var(--background)) 0%,
-      hsl(250 30% 6%) 100%
+      hsl(45 40% 96%) 50%,
+      hsl(var(--background)) 100%
     );
   }
 
   .bg-gold-gradient {
     background: linear-gradient(
       135deg,
-      hsl(var(--gold) / 0.1) 0%,
-      hsl(var(--gold) / 0.05) 50%,
+      hsl(var(--gold) / 0.08) 0%,
+      hsl(var(--gold) / 0.03) 50%,
       transparent 100%
+    );
+  }
+
+  .bg-radiant-gradient {
+    background: radial-gradient(
+      ellipse at 50% 0%,
+      hsl(var(--gold) / 0.12) 0%,
+      hsl(var(--sky-soft) / 0.08) 40%,
+      transparent 70%
     );
   }
 
   /* ========== Glass Effects ========== */
   
   .glass {
-    @apply backdrop-blur-md bg-card/60 border border-border/50;
+    @apply backdrop-blur-md bg-card/80 border border-border/60;
+    box-shadow: 0 4px 30px hsl(var(--gold) / 0.08);
   }
 
   .glass-gold {
-    @apply backdrop-blur-md bg-card/40 border border-gold/20;
+    @apply backdrop-blur-md bg-card/90 border border-primary/20;
+    box-shadow: 0 4px 30px hsl(var(--gold) / 0.12);
+  }
+
+  /* ========== Halo Effects ========== */
+  
+  .halo-glow {
+    box-shadow: 
+      0 0 0 1px hsl(var(--gold) / 0.2),
+      0 0 20px hsl(var(--gold) / 0.2),
+      0 0 40px hsl(var(--gold) / 0.1);
   }
 }
 
 @layer utilities {
   /* ========== Custom Animations ========== */
   
-  /* Particle float animation */
-  @keyframes particle {
+  /* Particle float animation - upward golden */
+  @keyframes particle-float {
     0% {
-      transform: translateY(100vh) rotate(0deg);
+      transform: translateY(0) rotate(0deg);
       opacity: 0;
     }
     10% {
-      opacity: 1;
+      opacity: 0.8;
     }
     90% {
-      opacity: 1;
+      opacity: 0.8;
     }
     100% {
-      transform: translateY(-100vh) rotate(720deg);
+      transform: translateY(-100vh) rotate(360deg);
       opacity: 0;
     }
   }
 
-  .animate-particle {
-    animation: particle linear infinite;
+  .animate-particle-float {
+    animation: particle-float linear infinite;
   }
 
   /* Halo pulse effect */
@@ -228,15 +265,33 @@
     0%, 100% {
       transform: scale(1);
       opacity: 0.6;
+      box-shadow: 0 0 30px hsl(var(--gold) / 0.3);
     }
     50% {
-      transform: scale(1.1);
-      opacity: 0.3;
+      transform: scale(1.05);
+      opacity: 0.4;
+      box-shadow: 0 0 50px hsl(var(--gold) / 0.5);
     }
   }
 
   .animate-halo {
-    animation: halo-pulse 4s ease-in-out infinite;
+    animation: halo-pulse 3s ease-in-out infinite;
+  }
+
+  /* Sparkle effect */
+  @keyframes sparkle {
+    0%, 100% {
+      opacity: 0.3;
+      transform: scale(0.8);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1.2);
+    }
+  }
+
+  .animate-sparkle {
+    animation: sparkle 2s ease-in-out infinite;
   }
 
   /* Gradient shift */
@@ -268,5 +323,47 @@
 
   .animate-fade-in-up {
     animation: fade-in-up 0.8s ease-out forwards;
+  }
+
+  /* Shimmer effect for buttons */
+  @keyframes shimmer {
+    0% {
+      transform: translateX(-100%);
+    }
+    100% {
+      transform: translateX(100%);
+    }
+  }
+
+  .animate-shimmer {
+    animation: shimmer 2s ease-in-out infinite;
+  }
+
+  /* Floating animation */
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-15px);
+    }
+  }
+
+  .animate-float {
+    animation: float 5s ease-in-out infinite;
+  }
+
+  /* Sacred geometry rotation */
+  @keyframes sacred-rotate {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  .animate-sacred-rotate {
+    animation: sacred-rotate 120s linear infinite;
   }
 }

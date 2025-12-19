@@ -10,45 +10,30 @@ interface HeroSectionProps {
 
 const HeroSection = ({ onCtaClick }: HeroSectionProps) => {
   const navigate = useNavigate();
+  
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Cosmic background with subtle movement */}
-      <div className="absolute inset-0 bg-gradient-to-b from-[#0a0a12] via-background to-background" />
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
+      {/* Divine white-gold gradient background */}
+      <div className="absolute inset-0 bg-gradient-to-b from-background via-gold/5 to-background" />
       
-      {/* Animated cosmic particles */}
-      <div className="absolute inset-0 overflow-hidden">
-        {[...Array(50)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute rounded-full"
-            style={{
-              width: Math.random() * 4 + 1,
-              height: Math.random() * 4 + 1,
-              background: i % 3 === 0 
-                ? "hsl(43 90% 70% / 0.8)" 
-                : i % 3 === 1 
-                  ? "hsl(200 70% 80% / 0.6)" 
-                  : "hsl(45 30% 96% / 0.7)",
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-            }}
-            animate={{ 
-              y: [0, -100, 0],
-              opacity: [0.3, 1, 0.3],
-              scale: [1, 1.5, 1]
-            }}
-            transition={{
-              duration: 6 + Math.random() * 6,
-              repeat: Infinity,
-              delay: Math.random() * 4,
-              ease: "easeInOut"
-            }}
-          />
-        ))}
-      </div>
+      {/* Radiant gradient from center */}
+      <div 
+        className="absolute inset-0"
+        style={{
+          background: "radial-gradient(ellipse at 50% 40%, hsl(43 80% 95% / 0.6) 0%, transparent 50%)"
+        }}
+      />
+      
+      {/* Ethereal angel silhouette background */}
+      <div 
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] opacity-[0.04]"
+        style={{
+          background: "radial-gradient(ellipse at 50% 30%, hsl(43 85% 50%) 0%, transparent 60%)"
+        }}
+      />
 
       {/* Sacred geometry patterns - subtle */}
-      <div className="absolute inset-0 opacity-[0.03]">
+      <div className="absolute inset-0 opacity-[0.02]">
         <svg className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1200px] h-[1200px]" viewBox="0 0 400 400">
           {/* Flower of Life pattern */}
           {[0, 60, 120, 180, 240, 300].map((angle, i) => (
@@ -58,19 +43,28 @@ const HeroSection = ({ onCtaClick }: HeroSectionProps) => {
               cy={200 + 50 * Math.sin(angle * Math.PI / 180)}
               r="50"
               fill="none"
-              stroke="hsl(43 90% 55%)"
-              strokeWidth="0.5"
+              stroke="hsl(43 85% 50%)"
+              strokeWidth="0.8"
             />
           ))}
-          <circle cx="200" cy="200" r="50" fill="none" stroke="hsl(43 90% 55%)" strokeWidth="0.5" />
-          <circle cx="200" cy="200" r="100" fill="none" stroke="hsl(43 90% 55%)" strokeWidth="0.5" />
-          <circle cx="200" cy="200" r="150" fill="none" stroke="hsl(43 90% 55%)" strokeWidth="0.5" />
+          <circle cx="200" cy="200" r="50" fill="none" stroke="hsl(43 85% 50%)" strokeWidth="0.8" />
+          <circle cx="200" cy="200" r="100" fill="none" stroke="hsl(43 85% 50%)" strokeWidth="0.5" />
+          <circle cx="200" cy="200" r="150" fill="none" stroke="hsl(43 85% 50%)" strokeWidth="0.3" />
         </svg>
       </div>
 
-      {/* Central divine glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[1000px] rounded-full bg-gradient-radial from-gold/15 via-gold/5 to-transparent blur-3xl" />
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-gradient-radial from-sky-light/10 via-transparent to-transparent blur-2xl" />
+      {/* Central divine halo glow */}
+      <motion.div 
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full"
+        style={{
+          background: "radial-gradient(circle, hsl(43 80% 80% / 0.25) 0%, hsl(43 80% 90% / 0.1) 40%, transparent 70%)"
+        }}
+        animate={{
+          scale: [1, 1.05, 1],
+          opacity: [0.6, 0.8, 0.6]
+        }}
+        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+      />
 
       <div className="relative z-10 container mx-auto px-6">
         <div className="flex flex-col items-center justify-center text-center">
@@ -84,20 +78,20 @@ const HeroSection = ({ onCtaClick }: HeroSectionProps) => {
           >
             {/* Divine halo rings */}
             <motion.div
-              className="absolute inset-0 -m-16"
+              className="absolute inset-0 -m-20"
               animate={{ rotate: 360 }}
               transition={{ duration: 120, repeat: Infinity, ease: "linear" }}
             >
-              <div className="absolute inset-0 rounded-full border border-gold/20" />
-              <div className="absolute inset-6 rounded-full border border-divine-white/15" />
-              <div className="absolute inset-12 rounded-full border border-sky-light/10" />
+              <div className="absolute inset-0 rounded-full border-2 border-gold/20" />
+              <div className="absolute inset-8 rounded-full border border-gold-light/15" />
+              <div className="absolute inset-16 rounded-full border border-sky-light/10" />
             </motion.div>
 
             {/* Outer divine glow */}
             <div 
-              className="absolute -inset-20 rounded-full blur-3xl"
+              className="absolute -inset-24 rounded-full blur-3xl"
               style={{
-                background: "radial-gradient(circle, hsl(43 90% 55% / 0.25) 0%, hsl(200 70% 75% / 0.1) 50%, transparent 70%)"
+                background: "radial-gradient(circle, hsl(43 80% 70% / 0.35) 0%, hsl(200 70% 85% / 0.15) 50%, transparent 70%)"
               }}
             />
             
@@ -110,9 +104,9 @@ const HeroSection = ({ onCtaClick }: HeroSectionProps) => {
               <img
                 src={angelHero}
                 alt="Angel AI - Ánh Sáng Của Cha Vũ Trụ"
-                className="relative w-64 md:w-80 lg:w-96 h-auto rounded-3xl"
+                className="relative w-56 md:w-72 lg:w-80 h-auto rounded-3xl"
                 style={{
-                  filter: "drop-shadow(0 0 40px hsl(43 90% 55% / 0.5)) drop-shadow(0 0 80px hsl(43 90% 55% / 0.3)) drop-shadow(0 0 120px hsl(200 70% 75% / 0.2))"
+                  filter: "drop-shadow(0 0 30px hsl(43 80% 60% / 0.6)) drop-shadow(0 0 60px hsl(43 80% 70% / 0.4)) drop-shadow(0 0 90px hsl(200 70% 80% / 0.2))"
                 }}
               />
               
@@ -120,11 +114,12 @@ const HeroSection = ({ onCtaClick }: HeroSectionProps) => {
               {[...Array(12)].map((_, i) => (
                 <motion.div
                   key={i}
-                  className="absolute w-1.5 h-1.5 rounded-full"
+                  className="absolute w-2 h-2 rounded-full"
                   style={{
-                    background: i % 2 === 0 ? "hsl(43 90% 70%)" : "hsl(45 100% 95%)",
+                    background: i % 2 === 0 ? "hsl(43 90% 60%)" : "hsl(45 100% 80%)",
                     top: `${15 + Math.random() * 70}%`,
                     left: `${5 + Math.random() * 90}%`,
+                    boxShadow: `0 0 8px ${i % 2 === 0 ? "hsl(43 90% 60%)" : "hsl(45 100% 80%)"}`
                   }}
                   animate={{
                     scale: [0.5, 1.5, 0.5],
@@ -140,7 +135,7 @@ const HeroSection = ({ onCtaClick }: HeroSectionProps) => {
             </motion.div>
           </motion.div>
 
-          {/* Main Title - Floating with divine glow */}
+          {/* Main Title - Large elegant golden text */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -148,23 +143,16 @@ const HeroSection = ({ onCtaClick }: HeroSectionProps) => {
             className="relative mb-4"
           >
             <h1 
-              className="font-display text-5xl md:text-7xl lg:text-8xl font-bold tracking-wider"
-              style={{
-                background: "linear-gradient(135deg, hsl(45 100% 85%) 0%, hsl(43 90% 60%) 50%, hsl(45 100% 80%) 100%)",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-                textShadow: "0 0 60px hsl(43 90% 55% / 0.6), 0 0 120px hsl(43 90% 55% / 0.4)",
-                filter: "drop-shadow(0 0 30px hsl(43 90% 55% / 0.5))"
-              }}
+              className="font-display text-5xl md:text-7xl lg:text-8xl font-bold tracking-wider text-gradient-gold glow-text"
             >
               ANGEL AI
             </h1>
             
-            {/* Subtle golden outline effect */}
+            {/* Golden underline */}
             <motion.div 
-              className="absolute -bottom-2 left-1/2 -translate-x-1/2 h-0.5 bg-gradient-to-r from-transparent via-gold to-transparent"
+              className="absolute -bottom-2 left-1/2 -translate-x-1/2 h-1 bg-gradient-to-r from-transparent via-gold to-transparent rounded-full"
               initial={{ width: 0 }}
-              animate={{ width: "60%" }}
+              animate={{ width: "70%" }}
               transition={{ duration: 1.5, delay: 1 }}
             />
           </motion.div>
@@ -174,10 +162,7 @@ const HeroSection = ({ onCtaClick }: HeroSectionProps) => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.8 }}
-            className="font-elegant text-2xl md:text-3xl lg:text-4xl text-divine-white mb-2"
-            style={{
-              textShadow: "0 0 30px hsl(45 30% 96% / 0.4)"
-            }}
+            className="font-elegant text-2xl md:text-3xl lg:text-4xl text-gold-dark mb-2 glow-text-soft"
           >
             Ánh Sáng Của Cha Vũ Trụ
           </motion.p>
@@ -187,41 +172,43 @@ const HeroSection = ({ onCtaClick }: HeroSectionProps) => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 1 }}
-            className="font-elegant text-lg md:text-xl text-muted-foreground/80 italic mb-10"
+            className="font-elegant text-lg md:text-xl text-muted-foreground italic mb-10"
           >
             The Divine Light of Father Universe
           </motion.p>
 
-          {/* CTA Buttons with halo + pulse */}
+          {/* CTA Button with halo + pulse */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 1.2 }}
             className="flex flex-col sm:flex-row gap-4"
           >
-            {/* Primary CTA - Glowing halo + soft pulse */}
+            {/* Primary CTA - Large glowing button */}
             <motion.div
+              className="relative"
               animate={{ 
                 boxShadow: [
-                  "0 0 30px hsl(43 90% 55% / 0.4), 0 0 60px hsl(43 90% 55% / 0.2)",
-                  "0 0 50px hsl(43 90% 55% / 0.6), 0 0 100px hsl(43 90% 55% / 0.3)",
-                  "0 0 30px hsl(43 90% 55% / 0.4), 0 0 60px hsl(43 90% 55% / 0.2)"
+                  "0 0 30px hsl(43 85% 50% / 0.4), 0 0 60px hsl(43 85% 50% / 0.2)",
+                  "0 0 50px hsl(43 85% 50% / 0.6), 0 0 100px hsl(43 85% 50% / 0.3)",
+                  "0 0 30px hsl(43 85% 50% / 0.4), 0 0 60px hsl(43 85% 50% / 0.2)"
                 ]
               }}
               transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-              className="rounded-full"
+              style={{ borderRadius: "9999px" }}
             >
               <Button
                 onClick={() => navigate("/chat")}
                 size="lg"
-                className="relative overflow-hidden bg-gradient-to-r from-gold via-gold-light to-gold text-background font-display text-lg px-10 py-7 rounded-full transition-all duration-500 hover:scale-105"
+                className="relative overflow-hidden bg-gradient-to-r from-gold via-gold-light to-gold text-background font-display text-lg md:text-xl px-10 md:px-14 py-7 md:py-8 rounded-full transition-all duration-500 hover:scale-105 border-0"
               >
+                {/* Shimmer effect */}
                 <motion.div
-                  className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent"
+                  className="absolute inset-0 bg-gradient-to-r from-transparent via-white/50 to-transparent"
                   animate={{ x: ["-100%", "100%"] }}
                   transition={{ duration: 2.5, repeat: Infinity, repeatDelay: 1.5 }}
                 />
-                <Heart className="w-5 h-5 mr-2 relative z-10" />
+                <Heart className="w-5 h-5 md:w-6 md:h-6 mr-2 relative z-10" />
                 <span className="relative z-10">Kết Nối Với Ánh Sáng</span>
               </Button>
             </motion.div>
@@ -231,7 +218,7 @@ const HeroSection = ({ onCtaClick }: HeroSectionProps) => {
               onClick={onCtaClick}
               variant="outline"
               size="lg"
-              className="border-gold/40 text-gold hover:bg-gold/10 hover:border-gold/60 font-display text-lg px-8 py-7 rounded-full backdrop-blur-sm transition-all duration-300"
+              className="border-2 border-gold/40 text-gold-dark hover:bg-gold/10 hover:border-gold/60 font-display text-lg px-8 py-7 rounded-full backdrop-blur-sm transition-all duration-300"
             >
               <Sparkles className="w-5 h-5 mr-2" />
               Khám Phá FUN Ecosystem
@@ -251,7 +238,7 @@ const HeroSection = ({ onCtaClick }: HeroSectionProps) => {
             transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
             className="flex flex-col items-center gap-2"
           >
-            <span className="text-xs text-muted-foreground/60 font-elegant tracking-[0.3em]">KHÁM PHÁ</span>
+            <span className="text-xs text-gold-dark/60 font-elegant tracking-[0.3em]">KHÁM PHÁ</span>
             <ChevronDown className="w-5 h-5 text-gold/50" />
           </motion.div>
         </motion.div>

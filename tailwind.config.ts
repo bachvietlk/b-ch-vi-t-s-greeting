@@ -52,11 +52,13 @@ export default {
           light: "hsl(var(--gold-light))",
           glow: "hsl(var(--gold-glow))",
           soft: "hsl(var(--gold-soft))",
+          dark: "hsl(var(--gold-dark))",
         },
         divine: {
           white: "hsl(var(--divine-white))",
         },
         sky: {
+          DEFAULT: "hsl(var(--sky-light))",
           light: "hsl(var(--sky-light))",
           soft: "hsl(var(--sky-soft))",
         },

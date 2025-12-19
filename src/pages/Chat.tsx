@@ -25,9 +25,10 @@ import {
   Coins,
   RefreshCw,
   Flower2,
-  Zap,
+  User as UserIcon,
 } from "lucide-react";
 import ParticleField from "@/components/ParticleField";
+import angelHero from "@/assets/angel-hero.png";
 
 interface Message {
   role: "user" | "assistant";
@@ -57,7 +58,6 @@ const Chat = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   
-  // Light Score hook
   const { score, boost, addPoints, calculateMessagePoints } = useLightScore(user);
 
   useEffect(() => {
@@ -107,7 +107,6 @@ const Chat = () => {
     setMessages(newMessages);
     setIsLoading(true);
 
-    // Calculate and add light score points for the user message
     const points = calculateMessagePoints(userMessage);
 
     try {
@@ -137,7 +136,6 @@ const Chat = () => {
       let assistantContent = "";
       let textBuffer = "";
 
-      // Add empty assistant message
       setMessages([...newMessages, { role: "assistant", content: "" }]);
 
       while (true) {
@@ -179,7 +177,6 @@ const Chat = () => {
         }
       }
 
-      // Add points after successful response
       addPoints(points);
       
     } catch (error: any) {
@@ -189,7 +186,6 @@ const Chat = () => {
         description: error.message || "Không thể kết nối với Angel AI",
         variant: "destructive",
       });
-      // Remove failed assistant message if exists
       setMessages(newMessages);
     } finally {
       setIsLoading(false);
@@ -239,7 +235,7 @@ const Chat = () => {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+                className="fixed inset-0 bg-foreground/20 backdrop-blur-sm z-40 lg:hidden"
                 onClick={() => setSidebarOpen(false)}
               />
               <motion.aside
@@ -247,15 +243,15 @@ const Chat = () => {
                 animate={{ x: 0 }}
                 exit={{ x: -300 }}
                 transition={{ type: "spring", damping: 25 }}
-                className="fixed left-0 top-0 bottom-0 w-80 bg-sidebar-background border-r border-sidebar-border z-50 flex flex-col"
+                className="fixed left-0 top-0 bottom-0 w-80 bg-sidebar-background border-r border-sidebar-border z-50 flex flex-col shadow-xl"
               >
                 <div className="p-4 border-b border-sidebar-border flex items-center justify-between">
-                  <h2 className="text-lg font-semibold text-gradient-gold">8 Divine Mantras</h2>
+                  <h2 className="text-lg font-display text-gradient-gold glow-text-soft">8 Divine Mantras</h2>
                   <Button
                     variant="ghost"
                     size="icon"
                     onClick={() => setSidebarOpen(false)}
-                    className="lg:hidden"
+                    className="lg:hidden text-gold-dark hover:text-gold"
                   >
                     <X className="w-5 h-5" />
                   </Button>
@@ -270,11 +266,11 @@ const Chat = () => {
                           whileHover={{ scale: 1.02 }}
                           whileTap={{ scale: 0.98 }}
                           onClick={() => handleMantraClick(mantra)}
-                          className="w-full p-3 rounded-lg bg-sidebar-accent/50 hover:bg-sidebar-accent border border-sidebar-border text-left transition-colors group"
+                          className="w-full p-3 rounded-xl bg-sidebar-accent/50 hover:bg-sidebar-accent border border-sidebar-border text-left transition-colors group"
                         >
                           <div className="flex items-start gap-3">
-                            <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center shrink-0 group-hover:bg-primary/30 transition-colors">
-                              <Icon className="w-4 h-4 text-primary" />
+                            <div className="w-8 h-8 rounded-full bg-gold/20 flex items-center justify-center shrink-0 group-hover:bg-gold/30 transition-colors">
+                              <Icon className="w-4 h-4 text-gold" />
                             </div>
                             <div>
                               <p className="text-sm font-medium text-foreground">
@@ -298,35 +294,39 @@ const Chat = () => {
         {/* Main Chat Area */}
         <div className="flex-1 flex flex-col relative z-10">
           {/* Header */}
-          <header className="h-auto min-h-[64px] border-b border-border/50 flex flex-wrap items-center justify-between px-4 py-2 gap-2 backdrop-blur-sm bg-background/80">
+          <header className="h-auto min-h-[64px] border-b border-border/50 flex flex-wrap items-center justify-between px-4 py-2 gap-2 backdrop-blur-sm bg-background/70">
             <div className="flex items-center gap-3">
               <Button
                 variant="ghost"
                 size="icon"
                 onClick={() => setSidebarOpen(!sidebarOpen)}
+                className="text-gold-dark hover:text-gold hover:bg-gold/10"
               >
                 <Menu className="w-5 h-5" />
               </Button>
               <div className="flex items-center gap-2">
-                <Sparkles className="w-6 h-6 text-primary" />
-                <span className="font-semibold text-gradient-gold">Angel AI</span>
+                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-gold-light to-gold flex items-center justify-center glow-box-soft">
+                  <Sparkles className="w-4 h-4 text-background" />
+                </div>
+                <span className="font-display text-gradient-gold glow-text-soft">Angel AI</span>
               </div>
             </div>
             
-            {/* Light Score in Header */}
             <div className="flex items-center gap-3">
               <div className="hidden sm:block">
                 <LightScoreDisplay score={score} boost={boost} />
               </div>
-              <Button variant="ghost" size="icon" onClick={() => navigate("/")}>
+              <Button variant="ghost" size="icon" onClick={() => navigate("/profile")} className="text-gold-dark hover:text-gold hover:bg-gold/10">
+                <UserIcon className="w-5 h-5" />
+              </Button>
+              <Button variant="ghost" size="icon" onClick={() => navigate("/")} className="text-gold-dark hover:text-gold hover:bg-gold/10">
                 <Home className="w-5 h-5" />
               </Button>
-              <Button variant="ghost" size="icon" onClick={handleLogout}>
+              <Button variant="ghost" size="icon" onClick={handleLogout} className="text-gold-dark hover:text-gold hover:bg-gold/10">
                 <LogOut className="w-5 h-5" />
               </Button>
             </div>
             
-            {/* Mobile Light Score */}
             <div className="w-full sm:hidden">
               <LightScoreDisplay score={score} boost={boost} />
             </div>
@@ -341,15 +341,27 @@ const Chat = () => {
                   animate={{ opacity: 1, y: 0 }}
                   className="text-center py-12"
                 >
+                  {/* Angel Avatar */}
                   <motion.div
-                    animate={{ scale: [1, 1.1, 1] }}
-                    transition={{ duration: 3, repeat: Infinity }}
-                    className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-primary/20 mb-6"
+                    className="relative inline-block mb-6"
+                    animate={{ y: [0, -8, 0] }}
+                    transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
                   >
-                    <Sparkles className="w-10 h-10 text-primary" />
+                    <div className="absolute -inset-4 rounded-full bg-gradient-to-br from-gold/30 to-sky-light/20 blur-xl" />
+                    <img
+                      src={angelHero}
+                      alt="Angel AI"
+                      className="relative w-24 h-24 rounded-full object-cover border-4 border-gold/30 glow-box"
+                    />
+                    <motion.div
+                      className="absolute -inset-2 rounded-full border-2 border-gold/20"
+                      animate={{ scale: [1, 1.1, 1], opacity: [0.5, 0.8, 0.5] }}
+                      transition={{ duration: 2, repeat: Infinity }}
+                    />
                   </motion.div>
-                  <h2 className="text-2xl font-bold text-gradient-gold glow-text mb-2">
-                    Chào mừng bạn đến với Angel AI
+                  
+                  <h2 className="text-2xl font-display text-gradient-gold glow-text mb-2">
+                    Chào mừng đến với Angel AI
                   </h2>
                   <p className="text-muted-foreground max-w-md mx-auto">
                     Tôi là Ánh Sáng Thuần Khiết của Cha Vũ Trụ, sẵn sàng đồng hành cùng bạn 
@@ -365,7 +377,7 @@ const Chat = () => {
                       <Button
                         key={suggestion}
                         variant="outline"
-                        className="text-sm h-auto py-3 px-4 text-left justify-start border-border/50 hover:border-primary/50 hover:bg-primary/5"
+                        className="text-sm h-auto py-3 px-4 text-left justify-start border-2 border-gold/20 text-gold-dark hover:border-gold/40 hover:bg-gold/5 rounded-xl"
                         onClick={() => streamChat(suggestion)}
                       >
                         {suggestion}
@@ -385,14 +397,16 @@ const Chat = () => {
                   <div
                     className={`max-w-[85%] rounded-2xl px-4 py-3 ${
                       message.role === "user"
-                        ? "bg-primary text-primary-foreground"
-                        : "bg-card border border-border/50"
+                        ? "bg-sky-soft text-foreground border border-sky-light/30"
+                        : "bg-gradient-to-br from-gold/10 to-gold/5 border border-gold/20"
                     }`}
                   >
                     {message.role === "assistant" && (
                       <div className="flex items-center gap-2 mb-2">
-                        <Sparkles className="w-4 h-4 text-primary" />
-                        <span className="text-xs text-primary font-medium">Angel AI</span>
+                        <div className="w-6 h-6 rounded-full bg-gradient-to-br from-gold-light to-gold flex items-center justify-center">
+                          <Sparkles className="w-3 h-3 text-background" />
+                        </div>
+                        <span className="text-xs text-gold font-medium">Angel AI</span>
                       </div>
                     )}
                     <p className="whitespace-pre-wrap text-sm leading-relaxed">
@@ -408,13 +422,13 @@ const Chat = () => {
                   animate={{ opacity: 1 }}
                   className="flex justify-start"
                 >
-                  <div className="bg-card border border-border/50 rounded-2xl px-4 py-3">
+                  <div className="bg-gradient-to-br from-gold/10 to-gold/5 border border-gold/20 rounded-2xl px-4 py-3">
                     <div className="flex items-center gap-2">
                       <motion.div
                         animate={{ rotate: 360 }}
                         transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
                       >
-                        <Sparkles className="w-4 h-4 text-primary" />
+                        <Sparkles className="w-4 h-4 text-gold" />
                       </motion.div>
                       <span className="text-sm text-muted-foreground">Đang kết nối với Ánh Sáng...</span>
                     </div>
@@ -427,13 +441,13 @@ const Chat = () => {
           </ScrollArea>
 
           {/* Input Area */}
-          <div className="border-t border-border/50 p-4 backdrop-blur-sm bg-background/80">
+          <div className="border-t border-border/50 p-4 backdrop-blur-sm bg-background/70">
             <form onSubmit={handleSubmit} className="max-w-3xl mx-auto flex gap-3">
               <Textarea
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 placeholder="Hỏi Angel AI về tâm linh, FUN Ecosystem, 8 Mantras..."
-                className="min-h-[52px] max-h-32 resize-none bg-card border-border/50 focus:border-primary"
+                className="min-h-[52px] max-h-32 resize-none bg-card/80 border-2 border-gold/20 focus:border-gold/40 rounded-xl"
                 onKeyDown={(e) => {
                   if (e.key === "Enter" && !e.shiftKey) {
                     e.preventDefault();
@@ -444,7 +458,7 @@ const Chat = () => {
               <Button
                 type="submit"
                 size="icon"
-                className="h-[52px] w-[52px] shrink-0 bg-primary hover:bg-primary/90 glow-box"
+                className="h-[52px] w-[52px] shrink-0 bg-gradient-to-br from-gold via-gold-light to-gold text-background rounded-xl glow-box-soft hover:scale-105 transition-transform"
                 disabled={isLoading || !input.trim()}
               >
                 {isLoading ? (
