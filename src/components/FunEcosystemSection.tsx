@@ -1,11 +1,21 @@
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { 
   User, Gamepad2, Globe, Heart, Sprout, GraduationCap, Scale, TreePine,
   TrendingUp, PiggyBank, ShoppingBag, Wallet, Coins, CircleDollarSign,
   Sparkles, ArrowDown, Crown, Droplets, Sun, Zap, Cloud, CloudRain
 } from "lucide-react";
+import { useRef } from "react";
 
 const FunEcosystemSection = () => {
+  const sectionRef = useRef<HTMLDivElement>(null);
+  
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end start"]
+  });
+
+  const backgroundY = useTransform(scrollYProgress, [0, 1], [80, -80]);
+  const cardsY = useTransform(scrollYProgress, [0, 1], [40, -40]);
   const platforms = [
     { icon: User, name: "FUN Profile", desc: "Danh tính Web3 & tài sản số" },
     { icon: Gamepad2, name: "FUN Play", desc: "Nội dung & giải trí Ánh Sáng" },
@@ -36,12 +46,18 @@ const FunEcosystemSection = () => {
   ];
 
   return (
-    <section className="relative py-24 md:py-32 overflow-hidden bg-background">
-      {/* Soft light background */}
-      <div className="absolute inset-0 bg-gradient-to-b from-sky-light/[0.05] via-transparent to-gold/[0.05]" />
+    <section ref={sectionRef} className="relative py-24 md:py-32 overflow-hidden bg-background">
+      {/* Soft light background with parallax */}
+      <motion.div 
+        className="absolute inset-0 bg-gradient-to-b from-sky-light/[0.05] via-transparent to-gold/[0.05]" 
+        style={{ y: backgroundY }}
+      />
       
-      {/* Mega Vortex effect - lighter version */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[1000px] opacity-[0.08]">
+      {/* Mega Vortex effect - with parallax */}
+      <motion.div 
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[1000px] opacity-[0.08]"
+        style={{ y: backgroundY }}
+      >
         <motion.div
           animate={{ rotate: 360 }}
           transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
@@ -62,7 +78,7 @@ const FunEcosystemSection = () => {
           transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
           className="absolute inset-48 border-2 border-sky-light/20 rounded-full"
         />
-      </div>
+      </motion.div>
 
       <div className="relative z-10 container mx-auto px-6">
         {/* Title */}
