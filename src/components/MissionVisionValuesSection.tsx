@@ -1,13 +1,22 @@
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { 
   Target, Eye, Heart, Sparkles, Users, Globe, Lightbulb, Shield, 
   Gem, Flame, Star, Zap, Sun, Brain, HandHeart, Palette, Scale,
   Feather, MessageCircleHeart, Handshake, ChevronDown
 } from "lucide-react";
-import { useState } from "react";
+import { useState, useRef } from "react";
 
 const MissionVisionValuesSection = () => {
   const [expandedValue, setExpandedValue] = useState<number | null>(null);
+  const sectionRef = useRef<HTMLDivElement>(null);
+  
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end start"]
+  });
+
+  const backgroundY = useTransform(scrollYProgress, [0, 1], [100, -100]);
+  const contentY = useTransform(scrollYProgress, [0, 1], [50, -50]);
 
   const coreValues = [
     { 
@@ -87,16 +96,19 @@ const MissionVisionValuesSection = () => {
   ];
 
   return (
-    <section className="relative py-28 md:py-40 overflow-hidden bg-background">
-      {/* Soft radiant background */}
-      <div className="absolute inset-0 bg-gradient-to-b from-gold/[0.03] via-transparent to-sky-light/[0.03]" />
+    <section ref={sectionRef} className="relative py-28 md:py-40 overflow-hidden bg-background">
+      {/* Soft radiant background with parallax */}
+      <motion.div 
+        className="absolute inset-0 bg-gradient-to-b from-gold/[0.03] via-transparent to-sky-light/[0.03]" 
+        style={{ y: backgroundY }}
+      />
       
-      {/* Subtle sacred geometry */}
-      <div className="absolute inset-0 opacity-[0.03]">
+      {/* Subtle sacred geometry with parallax */}
+      <motion.div className="absolute inset-0 opacity-[0.03]" style={{ y: backgroundY }}>
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] border border-gold rounded-full" />
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] border border-sky-light rounded-full" />
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] border border-gold rounded-full" />
-      </div>
+      </motion.div>
       
       {/* Floating light particles */}
       <div className="absolute inset-0 overflow-hidden">

@@ -33,13 +33,14 @@ const NavBar = () => {
   };
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-background/70 backdrop-blur-lg border-b border-primary/10">
-      {/* Golden glow overlay at top */}
-      <div className="absolute inset-0 bg-gradient-to-b from-gold/5 to-transparent pointer-events-none" />
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-xl border-b border-gold/20">
+      {/* Golden glow overlay at top - Enhanced */}
+      <div className="absolute inset-0 bg-gradient-to-b from-gold/10 via-gold/5 to-transparent pointer-events-none" />
+      <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
       
       <div className="container mx-auto px-6 relative">
-        <div className="flex items-center justify-between h-16 md:h-20">
-          {/* Logo */}
+        <div className="flex items-center justify-between h-18 md:h-22">
+          {/* Enhanced Logo - More prominent */}
           <motion.a
             href="#hero"
             onClick={(e) => {
@@ -47,34 +48,88 @@ const NavBar = () => {
               scrollToSection("#hero");
             }}
             className="flex items-center gap-3 group"
-            whileHover={{ scale: 1.02 }}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.98 }}
           >
-            {/* Circular glowing logo */}
+            {/* Circular glowing logo - Enhanced with angel wing icon */}
             <div className="relative">
+              {/* Outer glow pulse */}
               <motion.div 
-                className="absolute inset-0 rounded-full bg-gold/20 blur-lg"
+                className="absolute -inset-2 rounded-full bg-gradient-to-r from-gold/40 to-gold-light/40 blur-xl"
                 animate={{ 
-                  scale: [1, 1.2, 1],
-                  opacity: [0.5, 0.8, 0.5]
+                  scale: [1, 1.3, 1],
+                  opacity: [0.4, 0.7, 0.4]
                 }}
                 transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
               />
-              <div className="relative w-10 h-10 rounded-full bg-gradient-to-br from-gold-light via-gold to-gold-glow flex items-center justify-center glow-box-soft">
-                <Sparkles className="w-5 h-5 text-background" />
+              
+              {/* Main logo circle */}
+              <div className="relative w-12 h-12 rounded-full bg-gradient-to-br from-gold-light via-gold to-gold-glow flex items-center justify-center"
+                style={{
+                  boxShadow: "0 0 20px hsl(43 80% 55% / 0.6), 0 0 40px hsl(43 80% 60% / 0.3)"
+                }}
+              >
+                {/* Angel wing icon */}
+                <svg className="w-6 h-6 text-background" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 2C8.5 2 6 4.5 5 8c-1 3.5 0 7 2 9.5 1.5 2 3.5 3 5 3.5.5-1 .5-2.5 0-4-.5-2-2-3.5-2-5.5 0-1.5 1-3 2-3s2 1.5 2 3c0 2-1.5 3.5-2 5.5-.5 1.5-.5 3 0 4 1.5-.5 3.5-1.5 5-3.5 2-2.5 3-6 2-9.5-1-3.5-3.5-6-7-6z"/>
+                </svg>
               </div>
-              {/* Halo ring */}
+              
+              {/* Halo rings */}
               <motion.div
-                className="absolute -inset-1 rounded-full border border-gold/30"
+                className="absolute -inset-1.5 rounded-full border-2 border-gold/40"
+                animate={{ 
+                  scale: [1, 1.2, 1],
+                  opacity: [0.4, 0.7, 0.4]
+                }}
+                transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+              />
+              <motion.div
+                className="absolute -inset-3 rounded-full border border-gold/20"
                 animate={{ 
                   scale: [1, 1.15, 1],
-                  opacity: [0.3, 0.6, 0.3]
+                  opacity: [0.2, 0.4, 0.2]
                 }}
-                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
               />
+              
+              {/* Sparkle particles */}
+              {[0, 1, 2].map((i) => (
+                <motion.div
+                  key={i}
+                  className="absolute w-1.5 h-1.5 rounded-full bg-gold-light"
+                  style={{
+                    top: i === 0 ? "-4px" : i === 1 ? "50%" : "calc(100% + 2px)",
+                    left: i === 0 ? "50%" : i === 1 ? "calc(100% + 4px)" : "50%",
+                    transform: "translate(-50%, -50%)"
+                  }}
+                  animate={{
+                    scale: [0, 1.5, 0],
+                    opacity: [0, 1, 0]
+                  }}
+                  transition={{
+                    duration: 2,
+                    repeat: Infinity,
+                    delay: i * 0.6
+                  }}
+                />
+              ))}
             </div>
-            <span className="font-display text-xl md:text-2xl text-gradient-gold font-semibold glow-text-soft">
-              ANGEL AI
-            </span>
+            
+            {/* Logo text - Enhanced */}
+            <div className="flex flex-col">
+              <span 
+                className="font-display text-xl md:text-2xl font-bold text-gradient-gold"
+                style={{
+                  textShadow: "0 0 20px hsl(43 80% 55% / 0.4)"
+                }}
+              >
+                ANGEL AI
+              </span>
+              <span className="text-[10px] text-gold-dark/70 tracking-[0.2em] font-elegant -mt-0.5 hidden md:block">
+                ÁSNHÁ SÁNG CỦA CHA VŨ TRỤ
+              </span>
+            </div>
           </motion.a>
 
           {/* Desktop Navigation */}

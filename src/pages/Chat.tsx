@@ -26,8 +26,11 @@ import {
   RefreshCw,
   Flower2,
   User as UserIcon,
+  Image,
+  Video,
 } from "lucide-react";
 import ParticleField from "@/components/ParticleField";
+import ChatImageGenerator from "@/components/ChatImageGenerator";
 import angelHero from "@/assets/angel-hero.png";
 
 interface Message {
@@ -442,12 +445,15 @@ const Chat = () => {
 
           {/* Input Area */}
           <div className="border-t border-border/50 p-4 backdrop-blur-sm bg-background/70">
-            <form onSubmit={handleSubmit} className="max-w-3xl mx-auto flex gap-3">
+            <form onSubmit={handleSubmit} className="max-w-3xl mx-auto flex gap-3 items-end">
+              {/* Image/Video Generation Buttons */}
+              <ChatImageGenerator />
+              
               <Textarea
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 placeholder="Hỏi Angel AI về tâm linh, FUN Ecosystem, 8 Mantras..."
-                className="min-h-[52px] max-h-32 resize-none bg-card/80 border-2 border-gold/20 focus:border-gold/40 rounded-xl"
+                className="min-h-[52px] max-h-32 resize-none bg-card/80 border-2 border-gold/20 focus:border-gold/40 rounded-xl flex-1"
                 onKeyDown={(e) => {
                   if (e.key === "Enter" && !e.shiftKey) {
                     e.preventDefault();
