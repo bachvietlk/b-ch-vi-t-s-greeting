@@ -125,6 +125,20 @@
 
   body {
     @apply bg-background text-foreground font-sans antialiased;
+    font-size: 16px;
+    line-height: 1.75;
+  }
+
+  /* Enhanced typography */
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display font-bold tracking-tight;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  p {
+    @apply font-body text-base leading-relaxed;
+    text-rendering: optimizeLegibility;
   }
 
   /* Selection color */
@@ -160,28 +174,35 @@
   
   .glow-text {
     text-shadow: 
-      0 0 20px hsl(var(--gold) / 0.5),
-      0 0 40px hsl(var(--gold) / 0.3),
-      0 0 60px hsl(var(--gold) / 0.2);
+      0 0 30px hsl(var(--gold) / 0.6),
+      0 0 60px hsl(var(--gold) / 0.4),
+      0 0 90px hsl(var(--gold) / 0.25);
   }
 
   .glow-text-soft {
     text-shadow: 
-      0 0 10px hsl(var(--gold) / 0.3),
-      0 0 20px hsl(var(--gold) / 0.15);
+      0 0 15px hsl(var(--gold) / 0.4),
+      0 0 30px hsl(var(--gold) / 0.2);
   }
 
   .glow-box {
     box-shadow: 
-      0 0 20px hsl(var(--gold) / 0.25),
-      0 0 40px hsl(var(--gold) / 0.15),
-      0 0 60px hsl(var(--gold) / 0.1);
+      0 0 30px hsl(var(--gold) / 0.35),
+      0 0 60px hsl(var(--gold) / 0.2),
+      0 0 90px hsl(var(--gold) / 0.1);
   }
 
   .glow-box-soft {
     box-shadow: 
-      0 0 15px hsl(var(--gold) / 0.15),
-      0 0 30px hsl(var(--gold) / 0.08);
+      0 0 20px hsl(var(--gold) / 0.2),
+      0 0 40px hsl(var(--gold) / 0.1);
+  }
+
+  .glow-box-strong {
+    box-shadow: 
+      0 0 40px hsl(var(--gold) / 0.5),
+      0 0 80px hsl(var(--gold) / 0.3),
+      0 0 120px hsl(var(--gold) / 0.15);
   }
 
   /* ========== Divine Gradients ========== */

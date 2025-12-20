@@ -78,9 +78,14 @@ export default {
         },
       },
       fontFamily: {
-        display: ["Cinzel", "serif"],
-        elegant: ["Cormorant Garamond", "serif"],
-        sans: ["Inter", "sans-serif"],
+        display: ["Playfair Display", "serif"],
+        elegant: ["Cormorant Garamond", "Georgia", "serif"],
+        sans: ["Poppins", "Inter", "sans-serif"],
+        body: ["Inter", "sans-serif"],
+      },
+      fontSize: {
+        'body': ['1rem', { lineHeight: '1.75' }],
+        'body-lg': ['1.125rem', { lineHeight: '1.75' }],
       },
       borderRadius: {
         lg: "var(--radius)",

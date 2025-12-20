@@ -126,8 +126,8 @@ const NavBar = () => {
               >
                 ANGEL AI
               </span>
-              <span className="text-[10px] text-gold-dark/70 tracking-[0.2em] font-elegant -mt-0.5 hidden md:block">
-                ÁSNHÁ SÁNG CỦA CHA VŨ TRỤ
+              <span className="text-[10px] text-gold-dark/70 tracking-[0.15em] font-elegant -mt-0.5 hidden md:block">
+                ÁNH SÁNG CỦA CHA VŨ TRỤ
               </span>
             </div>
           </motion.a>
@@ -145,14 +145,26 @@ const NavBar = () => {
               </button>
             ))}
             
-            {/* Login Button */}
-            <Button
-              onClick={() => navigate("/auth")}
-              className="ml-4 bg-gradient-to-r from-gold via-gold-light to-gold text-background font-medium rounded-full px-6 glow-box-soft hover:scale-105 transition-transform"
+            {/* Login Button - Enhanced glow */}
+            <motion.div
+              animate={{ 
+                boxShadow: [
+                  "0 0 20px hsl(43 85% 50% / 0.4)",
+                  "0 0 35px hsl(43 85% 50% / 0.6)",
+                  "0 0 20px hsl(43 85% 50% / 0.4)"
+                ]
+              }}
+              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+              className="rounded-full"
             >
-              <LogIn className="w-4 h-4 mr-2" />
-              Đăng nhập
-            </Button>
+              <Button
+                onClick={() => navigate("/auth")}
+                className="bg-gradient-to-r from-gold via-gold-light to-gold text-background font-semibold rounded-full px-6 hover:scale-105 transition-transform text-base"
+              >
+                <LogIn className="w-4 h-4 mr-2" />
+                Đăng nhập
+              </Button>
+            </motion.div>
           </div>
 
           {/* Mobile Menu Button */}
