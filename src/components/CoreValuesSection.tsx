@@ -68,6 +68,136 @@ const CoreValuesSection = () => {
   const toggleCard = (number: number) => {
     setExpandedCard(expandedCard === number ? null : number);
   };
-  return;
+  
+  return (
+    <section className="py-20 bg-gradient-to-b from-background to-amber-50/30 relative overflow-hidden">
+      {/* Floating particles */}
+      <div className="absolute inset-0 pointer-events-none">
+        {[...Array(20)].map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute w-1 h-1 bg-amber-400/40 rounded-full"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+            }}
+            animate={{
+              y: [0, -30, 0],
+              opacity: [0.2, 0.6, 0.2],
+            }}
+            transition={{
+              duration: 3 + Math.random() * 2,
+              repeat: Infinity,
+              delay: Math.random() * 2,
+            }}
+          />
+        ))}
+      </div>
+
+      <div className="container mx-auto px-4 relative z-10">
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="text-center mb-16"
+        >
+          {/* Diamond Icon */}
+          <motion.div
+            className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-br from-blue-400 via-blue-500 to-blue-600 mb-6"
+            animate={{ rotate: 360 }}
+            transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+            style={{
+              boxShadow: "0 0 40px rgba(59, 130, 246, 0.5), 0 0 80px rgba(251, 191, 36, 0.3)",
+            }}
+          >
+            <Diamond className="w-10 h-10 text-white" />
+          </motion.div>
+
+          <h2 className="text-4xl md:text-5xl font-display font-bold text-amber-600 mb-3"
+            style={{ textShadow: "0 0 30px rgba(251, 191, 36, 0.4)" }}>
+            12 Giá Trị Cốt Lõi
+          </h2>
+          <p className="text-xl text-amber-700/80 font-medium">
+            12 Tầng Ánh Sáng của Cha Vũ Trụ
+          </p>
+        </motion.div>
+
+        {/* Cards Grid */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+          {coreValues.map((value, index) => {
+            const Icon = value.icon;
+            const isExpanded = expandedCard === value.number;
+            
+            return (
+              <motion.div
+                key={value.number}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.05 }}
+              >
+                <Card
+                  className={`relative cursor-pointer transition-all duration-300 bg-gradient-to-br from-amber-50 to-orange-50 border-amber-200/50 hover:shadow-xl hover:shadow-amber-200/30 hover:-translate-y-1 ${
+                    isExpanded ? "ring-2 ring-amber-400" : ""
+                  }`}
+                  onClick={() => toggleCard(value.number)}
+                >
+                  {/* Number Badge */}
+                  <div className="absolute -top-2 -right-2 w-7 h-7 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center text-white text-xs font-bold shadow-lg">
+                    {value.number}
+                  </div>
+
+                  <CardContent className="p-4 text-center">
+                    {/* Icon Circle */}
+                    <motion.div
+                      className="w-16 h-16 mx-auto mb-3 rounded-full bg-gradient-to-br from-amber-100 to-orange-100 flex items-center justify-center"
+                      whileHover={{ scale: 1.1 }}
+                      style={{
+                        boxShadow: "0 4px 20px rgba(251, 191, 36, 0.3)",
+                      }}
+                    >
+                      <Icon className="w-8 h-8 text-amber-600" />
+                    </motion.div>
+
+                    {/* Title */}
+                    <h3 className="text-sm font-bold text-amber-700 mb-2 leading-tight">
+                      {value.title}
+                    </h3>
+
+                    {/* Expand Icon */}
+                    <motion.div
+                      animate={{ rotate: isExpanded ? 180 : 0 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      <ChevronDown className="w-4 h-4 mx-auto text-amber-500" />
+                    </motion.div>
+
+                    {/* Expanded Description */}
+                    <AnimatePresence>
+                      {isExpanded && (
+                        <motion.div
+                          initial={{ opacity: 0, height: 0 }}
+                          animate={{ opacity: 1, height: "auto" }}
+                          exit={{ opacity: 0, height: 0 }}
+                          transition={{ duration: 0.2 }}
+                          className="overflow-hidden"
+                        >
+                          <p className="text-xs text-amber-600/80 mt-3 leading-relaxed">
+                            {value.description}
+                          </p>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  );
 };
+
 export default CoreValuesSection;

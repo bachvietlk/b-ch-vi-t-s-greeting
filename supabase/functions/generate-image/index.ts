@@ -5,6 +5,8 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
+const MAX_PROMPT_LENGTH = 2000;
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -12,17 +14,41 @@ serve(async (req) => {
 
   try {
     const { prompt } = await req.json();
+    
+    // Input validation
+    if (!prompt || typeof prompt !== "string") {
+      console.log("Invalid prompt received");
+      return new Response(
+        JSON.stringify({ error: "Prompt không hợp lệ" }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    const trimmedPrompt = prompt.trim();
+    
+    if (trimmedPrompt.length === 0) {
+      console.log("Empty prompt received");
+      return new Response(
+        JSON.stringify({ error: "Prompt không được để trống" }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    if (trimmedPrompt.length > MAX_PROMPT_LENGTH) {
+      console.log("Prompt too long:", trimmedPrompt.length);
+      return new Response(
+        JSON.stringify({ error: `Prompt quá dài (tối đa ${MAX_PROMPT_LENGTH} ký tự)` }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
 
     if (!LOVABLE_API_KEY) {
       throw new Error("LOVABLE_API_KEY is not configured");
     }
 
-    if (!prompt) {
-      throw new Error("Prompt is required");
-    }
-
-    console.log("Generating image with prompt:", prompt);
+    console.log("Generating image with prompt length:", trimmedPrompt.length);
 
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
@@ -35,7 +61,7 @@ serve(async (req) => {
         messages: [
           {
             role: "user",
-            content: prompt,
+            content: trimmedPrompt,
           },
         ],
         modalities: ["image", "text"],

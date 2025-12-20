@@ -100,27 +100,27 @@ const Knowledge = () => {
     setUploading(true);
     
     try {
-      // For now, we'll show a success message
-      // In a real implementation, you would upload to Supabase Storage
-      // and process the files for RAG
+      // NOTE: File upload feature is not yet implemented
+      // Files are validated but not stored or processed
+      // This is a placeholder for future RAG integration
       
-      await new Promise((resolve) => setTimeout(resolve, 2000)); // Simulate upload
+      await new Promise((resolve) => setTimeout(resolve, 1500));
       
       setUploadSuccess(true);
       setFiles([]);
       
       toast({
-        title: "Thành công! ✨",
-        description: "Tri Thức đã được Angel AI tiếp nhận trong Ánh Sáng Thuần Khiết.",
+        title: "Tính năng đang phát triển 🚧",
+        description: "Chức năng tải lên tri thức sẽ sớm được hoàn thiện. Cảm ơn bạn đã quan tâm!",
       });
 
       // Reset success state after animation
       setTimeout(() => setUploadSuccess(false), 5000);
       
-    } catch (error: any) {
+    } catch (error: unknown) {
       toast({
         title: "Lỗi",
-        description: "Không thể tải lên tài liệu. Vui lòng thử lại.",
+        description: "Không thể xử lý yêu cầu. Vui lòng thử lại.",
         variant: "destructive",
       });
     } finally {
