@@ -28,7 +28,8 @@ import {
 } from "lucide-react";
 import ChatImageGenerator from "@/components/ChatImageGenerator";
 import ImageCreationCard from "@/components/ImageCreationCard";
-import ChatImageUpload from "@/components/ChatImageUpload";
+import ChatAttachButton from "@/components/ChatAttachButton";
+import { Image, Video } from "lucide-react";
 import angelHero from "@/assets/angel-hero.png";
 
 interface Message {
@@ -272,7 +273,7 @@ const Chat = () => {
         {/* Golden floating particles background */}
         <GoldenParticles />
 
-        {/* Sidebar - Mantras Panel */}
+        {/* Sidebar - Mantras Panel + AI Tools */}
         <AnimatePresence>
           {sidebarOpen && (
             <>
@@ -291,7 +292,7 @@ const Chat = () => {
                 className="fixed left-0 top-0 bottom-0 w-80 bg-[hsl(45_40%_99%)] border-r border-[hsl(43_40%_88%)] z-50 flex flex-col shadow-2xl"
               >
                 <div className="p-5 border-b border-[hsl(43_40%_90%)] flex items-center justify-between">
-                  <h2 className="text-lg font-semibold text-[hsl(43_85%_40%)]">8 Divine Mantras</h2>
+                  <h2 className="text-lg font-semibold text-[hsl(43_85%_40%)]">Menu</h2>
                   <Button
                     variant="ghost"
                     size="icon"
@@ -300,6 +301,22 @@ const Chat = () => {
                   >
                     <X className="w-5 h-5" />
                   </Button>
+                </div>
+                
+                {/* AI Creation Tools Section */}
+                <div className="p-4 border-b border-[hsl(43_40%_90%)]">
+                  <h3 className="text-sm font-medium text-[hsl(35_40%_45%)] mb-3 uppercase tracking-wide">Công cụ AI</h3>
+                  <div className="space-y-2">
+                    <ChatImageGenerator 
+                      variant="sidebar"
+                      onImageGenerated={(url) => console.log('Generated:', url)} 
+                    />
+                  </div>
+                </div>
+
+                {/* Divine Mantras Section */}
+                <div className="p-4 border-b border-[hsl(43_40%_90%)]">
+                  <h3 className="text-sm font-medium text-[hsl(35_40%_45%)] mb-3 uppercase tracking-wide">8 Divine Mantras</h3>
                 </div>
                 <div className="flex-1 overflow-y-auto p-4 space-y-3">
                   {mantras.map((mantra, index) => {
@@ -627,11 +644,10 @@ const Chat = () => {
         <div className="relative z-10 border-t border-[hsl(43_40%_90%)] bg-[hsl(45_40%_99%/0.95)] backdrop-blur-md px-4 md:px-8 py-5 md:py-6">
           <form onSubmit={handleSubmit} className="max-w-4xl mx-auto">
             <div className="flex items-end gap-4">
-              {/* Image Upload to R2 */}
-              <ChatImageUpload onImageUploaded={(url) => console.log('Uploaded:', url)} />
+              {/* Attach Button (Image/File Upload) */}
+              <ChatAttachButton onImageUploaded={(url) => console.log('Uploaded:', url)} />
               
-              {/* Image/Video Generation */}
-              <ChatImageGenerator />
+              {/* Input container with golden border - Larger */}
               
               {/* Input container with golden border - Larger */}
               <div 
