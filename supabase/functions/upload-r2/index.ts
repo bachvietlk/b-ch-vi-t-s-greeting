@@ -1,10 +1,108 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { S3Client, PutObjectCommand } from "https://esm.sh/@aws-sdk/client-s3@3.654.0";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
+
+// Create HMAC-SHA256 signature
+async function hmacSha256(key: ArrayBuffer, message: string): Promise<ArrayBuffer> {
+  const encoder = new TextEncoder();
+  const cryptoKey = await crypto.subtle.importKey(
+    "raw",
+    key,
+    { name: "HMAC", hash: "SHA-256" },
+    false,
+    ["sign"]
+  );
+  return await crypto.subtle.sign("HMAC", cryptoKey, encoder.encode(message));
+}
+
+// Create SHA-256 hash
+async function sha256(message: string | Uint8Array): Promise<string> {
+  const data = typeof message === "string" ? new TextEncoder().encode(message) : message;
+  const hashBuffer = await crypto.subtle.digest("SHA-256", data as BufferSource);
+  return Array.from(new Uint8Array(hashBuffer))
+    .map(b => b.toString(16).padStart(2, "0"))
+    .join("");
+}
+
+// Get signing key for AWS Signature V4
+async function getSigningKey(secretKey: string, dateStamp: string, region: string, service: string): Promise<ArrayBuffer> {
+  const encoder = new TextEncoder();
+  const kDate = await hmacSha256(encoder.encode("AWS4" + secretKey).buffer as ArrayBuffer, dateStamp);
+  const kRegion = await hmacSha256(kDate, region);
+  const kService = await hmacSha256(kRegion, service);
+  const kSigning = await hmacSha256(kService, "aws4_request");
+  return kSigning;
+}
+
+// Sign request with AWS Signature V4
+async function signRequest(
+  method: string,
+  url: URL,
+  headers: Record<string, string>,
+  body: Uint8Array,
+  accessKeyId: string,
+  secretAccessKey: string,
+  region: string = "auto"
+): Promise<Record<string, string>> {
+  const service = "s3";
+  const now = new Date();
+  const amzDate = now.toISOString().replace(/[:-]|\.\d{3}/g, "").slice(0, 15) + "Z";
+  const dateStamp = amzDate.slice(0, 8);
+
+  // Calculate payload hash
+  const payloadHash = await sha256(body);
+
+  // Prepare headers
+  const signedHeaders: Record<string, string> = {
+    ...headers,
+    "host": url.host,
+    "x-amz-date": amzDate,
+    "x-amz-content-sha256": payloadHash,
+  };
+
+  // Create canonical request
+  const sortedHeaderKeys = Object.keys(signedHeaders).sort();
+  const canonicalHeaders = sortedHeaderKeys
+    .map(key => `${key.toLowerCase()}:${signedHeaders[key].trim()}`)
+    .join("\n") + "\n";
+  const signedHeadersStr = sortedHeaderKeys.map(k => k.toLowerCase()).join(";");
+
+  const canonicalRequest = [
+    method,
+    url.pathname,
+    url.search.slice(1), // remove leading ?
+    canonicalHeaders,
+    signedHeadersStr,
+    payloadHash,
+  ].join("\n");
+
+  // Create string to sign
+  const credentialScope = `${dateStamp}/${region}/${service}/aws4_request`;
+  const stringToSign = [
+    "AWS4-HMAC-SHA256",
+    amzDate,
+    credentialScope,
+    await sha256(canonicalRequest),
+  ].join("\n");
+
+  // Calculate signature
+  const signingKey = await getSigningKey(secretAccessKey, dateStamp, region, service);
+  const signatureBuffer = await hmacSha256(signingKey, stringToSign);
+  const signature = Array.from(new Uint8Array(signatureBuffer))
+    .map(b => b.toString(16).padStart(2, "0"))
+    .join("");
+
+  // Create authorization header
+  const authorization = `AWS4-HMAC-SHA256 Credential=${accessKeyId}/${credentialScope}, SignedHeaders=${signedHeadersStr}, Signature=${signature}`;
+
+  return {
+    ...signedHeaders,
+    "Authorization": authorization,
+  };
+}
 
 serve(async (req) => {
   // Handle CORS preflight requests
@@ -19,6 +117,14 @@ serve(async (req) => {
     const R2_ENDPOINT = Deno.env.get('R2_ENDPOINT');
     const R2_PUBLIC_URL = Deno.env.get('R2_PUBLIC_URL');
 
+    console.log('R2 Config check:', {
+      hasAccessKey: !!R2_ACCESS_KEY_ID,
+      hasSecretKey: !!R2_SECRET_ACCESS_KEY,
+      hasBucket: !!R2_BUCKET_NAME,
+      hasEndpoint: !!R2_ENDPOINT,
+      hasPublicUrl: !!R2_PUBLIC_URL,
+    });
+
     if (!R2_ACCESS_KEY_ID || !R2_SECRET_ACCESS_KEY || !R2_BUCKET_NAME || !R2_ENDPOINT || !R2_PUBLIC_URL) {
       console.error('Missing R2 configuration');
       return new Response(
@@ -26,16 +132,6 @@ serve(async (req) => {
         { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
-
-    // Initialize S3 client for R2
-    const s3Client = new S3Client({
-      region: 'auto',
-      endpoint: R2_ENDPOINT,
-      credentials: {
-        accessKeyId: R2_ACCESS_KEY_ID,
-        secretAccessKey: R2_SECRET_ACCESS_KEY,
-      },
-    });
 
     const formData = await req.formData();
     const file = formData.get('file') as File;
@@ -60,15 +156,41 @@ serve(async (req) => {
 
     console.log(`Uploading file: ${fileName}, size: ${uint8Array.length} bytes, type: ${file.type}`);
 
+    // Build R2 URL
+    const r2Url = new URL(`${R2_ENDPOINT}/${R2_BUCKET_NAME}/${fileName}`);
+
+    // Sign the request
+    const headers: Record<string, string> = {
+      "Content-Type": file.type || "application/octet-stream",
+      "Content-Length": uint8Array.length.toString(),
+    };
+
+    const signedHeaders = await signRequest(
+      "PUT",
+      r2Url,
+      headers,
+      uint8Array,
+      R2_ACCESS_KEY_ID,
+      R2_SECRET_ACCESS_KEY
+    );
+
+    console.log('Sending request to R2...');
+
     // Upload to R2
-    const putCommand = new PutObjectCommand({
-      Bucket: R2_BUCKET_NAME,
-      Key: fileName,
-      Body: uint8Array,
-      ContentType: file.type,
+    const r2Response = await fetch(r2Url.toString(), {
+      method: "PUT",
+      headers: signedHeaders,
+      body: uint8Array,
     });
 
-    await s3Client.send(putCommand);
+    if (!r2Response.ok) {
+      const errorText = await r2Response.text();
+      console.error('R2 upload failed:', r2Response.status, errorText);
+      return new Response(
+        JSON.stringify({ error: `R2 upload failed: ${r2Response.status}` }),
+        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
 
     // Construct public URL
     const publicUrl = `${R2_PUBLIC_URL.replace(/\/$/, '')}/${fileName}`;
