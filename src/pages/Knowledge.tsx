@@ -6,6 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { User, Session } from "@supabase/supabase-js";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
+import { useR2Upload } from "@/hooks/useR2Upload";
 import ParticleField from "@/components/ParticleField";
 import {
   Sparkles,
@@ -94,33 +95,47 @@ const Knowledge = () => {
     setFiles((prev) => prev.filter((_, i) => i !== index));
   };
 
+  const { uploadMultiple, isUploading: r2Uploading, progress } = useR2Upload({
+    folder: 'knowledge',
+    onSuccess: (result) => {
+      console.log('File uploaded to R2:', result.url);
+    },
+    onError: (error) => {
+      console.error('R2 upload error:', error);
+    }
+  });
+
   const handleUpload = async () => {
     if (files.length === 0 || !user) return;
     
     setUploading(true);
     
     try {
-      // NOTE: File upload feature is not yet implemented
-      // Files are validated but not stored or processed
-      // This is a placeholder for future RAG integration
+      // Upload all files to R2
+      const results = await uploadMultiple(files);
       
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+      const successCount = results.filter(r => r.success).length;
+      const failCount = results.filter(r => !r.success).length;
       
-      setUploadSuccess(true);
-      setFiles([]);
-      
-      toast({
-        title: "Tính năng đang phát triển 🚧",
-        description: "Chức năng tải lên tri thức sẽ sớm được hoàn thiện. Cảm ơn bạn đã quan tâm!",
-      });
+      if (successCount > 0) {
+        setUploadSuccess(true);
+        setFiles([]);
+        
+        toast({
+          title: "Tải lên thành công! ✨",
+          description: `Đã tải lên ${successCount} tài liệu lên Cloudflare R2.${failCount > 0 ? ` ${failCount} file thất bại.` : ''}`,
+        });
 
-      // Reset success state after animation
-      setTimeout(() => setUploadSuccess(false), 5000);
+        // Reset success state after animation
+        setTimeout(() => setUploadSuccess(false), 5000);
+      } else {
+        throw new Error('Tất cả files đều thất bại');
+      }
       
     } catch (error: unknown) {
       toast({
         title: "Lỗi",
-        description: "Không thể xử lý yêu cầu. Vui lòng thử lại.",
+        description: "Không thể tải lên. Vui lòng thử lại.",
         variant: "destructive",
       });
     } finally {

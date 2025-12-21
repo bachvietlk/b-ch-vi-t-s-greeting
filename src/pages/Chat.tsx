@@ -28,6 +28,7 @@ import {
 } from "lucide-react";
 import ChatImageGenerator from "@/components/ChatImageGenerator";
 import ImageCreationCard from "@/components/ImageCreationCard";
+import ChatImageUpload from "@/components/ChatImageUpload";
 import angelHero from "@/assets/angel-hero.png";
 
 interface Message {
@@ -626,6 +627,9 @@ const Chat = () => {
         <div className="relative z-10 border-t border-[hsl(43_40%_90%)] bg-[hsl(45_40%_99%/0.95)] backdrop-blur-md px-4 md:px-8 py-5 md:py-6">
           <form onSubmit={handleSubmit} className="max-w-4xl mx-auto">
             <div className="flex items-end gap-4">
+              {/* Image Upload to R2 */}
+              <ChatImageUpload onImageUploaded={(url) => console.log('Uploaded:', url)} />
+              
               {/* Image/Video Generation */}
               <ChatImageGenerator />
               
