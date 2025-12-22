@@ -9,6 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { useLightScore } from "@/hooks/useLightScore";
 import LightScoreDisplay from "@/components/LightScoreDisplay";
+import DivineLightCreator from "@/components/DivineLightCreator";
 import {
   Sparkles,
   Send,
@@ -488,6 +489,9 @@ const Chat = () => {
                     </p>
                   </div>
                 </motion.div>
+
+                {/* Divine Light Creator Card */}
+                <DivineLightCreator onPointsEarned={addPoints} />
 
                 {/* Quick suggestions - Clean grid layout */}
                 <div className="mt-8 max-w-2xl mx-auto">
