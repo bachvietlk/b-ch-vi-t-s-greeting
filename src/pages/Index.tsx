@@ -43,12 +43,12 @@ const Index = () => {
           <MissionVisionValuesSection />
         </section>
 
-        <section id="ecosystem">
-          <FunEcosystemSection />
-        </section>
-
         <section id="core-values">
           <CoreValuesSection />
+        </section>
+
+        <section id="ecosystem">
+          <FunEcosystemSection />
         </section>
 
         <section id="mantras">

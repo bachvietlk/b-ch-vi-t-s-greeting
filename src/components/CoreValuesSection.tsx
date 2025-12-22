@@ -1,8 +1,7 @@
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { 
   Sun, Heart, Brain, Flame, HandHeart, Users, Sparkles, 
-  Lightbulb, Hand, HeartHandshake, Shield, Star, ChevronDown, Diamond 
+  Lightbulb, Hand, HeartHandshake, Shield, Star, Diamond 
 } from "lucide-react";
 
 const coreValues = [
@@ -93,11 +92,6 @@ const coreValues = [
 ];
 
 const CoreValuesSection = () => {
-  const [expandedCard, setExpandedCard] = useState<number | null>(null);
-
-  const toggleCard = (number: number) => {
-    setExpandedCard(expandedCard === number ? null : number);
-  };
 
   return (
     <section className="py-24 md:py-32 relative overflow-hidden">
@@ -214,7 +208,6 @@ const CoreValuesSection = () => {
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 md:gap-5">
           {coreValues.map((value, index) => {
             const Icon = value.icon;
-            const isExpanded = expandedCard === value.number;
 
             return (
               <motion.div
@@ -231,13 +224,10 @@ const CoreValuesSection = () => {
                 className="group"
               >
                 <motion.div
-                  className={`relative cursor-pointer rounded-2xl overflow-hidden transition-all duration-500
-                    bg-white/90 backdrop-blur-sm border
-                    ${isExpanded 
-                      ? "border-gold shadow-[0_20px_60px_-15px_hsl(43_90%_55%_/_0.4)] ring-2 ring-gold/30" 
-                      : "border-gold/20 shadow-[0_8px_30px_-10px_hsl(43_90%_55%_/_0.2)] hover:border-gold/50 hover:shadow-[0_15px_50px_-10px_hsl(43_90%_55%_/_0.35)]"
-                    }`}
-                  onClick={() => toggleCard(value.number)}
+                  className="relative rounded-2xl overflow-hidden transition-all duration-500
+                    bg-white/90 backdrop-blur-sm border border-gold/20 
+                    shadow-[0_8px_30px_-10px_hsl(43_90%_55%_/_0.2)] 
+                    hover:border-gold/50 hover:shadow-[0_15px_50px_-10px_hsl(43_90%_55%_/_0.35)]"
                   whileHover={{ y: -8, scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                 >
@@ -274,37 +264,16 @@ const CoreValuesSection = () => {
                     </motion.div>
 
                     {/* Title */}
-                    <h3 className="font-display text-sm md:text-base font-bold text-foreground group-hover:text-gold transition-colors mb-2 leading-tight">
+                    <h3 className="font-display text-sm md:text-base font-bold text-foreground group-hover:text-gold transition-colors mb-3 leading-tight">
                       {value.title}
                     </h3>
 
-                    {/* Expand Icon */}
-                    <motion.div
-                      animate={{ rotate: isExpanded ? 180 : 0 }}
-                      transition={{ duration: 0.3 }}
-                      className="flex justify-center"
-                    >
-                      <ChevronDown className={`w-5 h-5 ${isExpanded ? 'text-gold' : 'text-gold/50'} transition-colors`} />
-                    </motion.div>
-
-                    {/* Expanded Description */}
-                    <AnimatePresence>
-                      {isExpanded && (
-                        <motion.div
-                          initial={{ opacity: 0, height: 0 }}
-                          animate={{ opacity: 1, height: "auto" }}
-                          exit={{ opacity: 0, height: 0 }}
-                          transition={{ duration: 0.3, ease: "easeInOut" }}
-                          className="overflow-hidden"
-                        >
-                          <div className="pt-3 mt-3 border-t border-gold/20">
-                            <p className="text-xs md:text-sm text-muted-foreground leading-relaxed font-body">
-                              {value.description}
-                            </p>
-                          </div>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
+                    {/* Description - Always visible */}
+                    <div className="pt-2 border-t border-gold/20">
+                      <p className="text-xs md:text-sm text-muted-foreground leading-relaxed font-body">
+                        {value.description}
+                      </p>
+                    </div>
                   </div>
                 </motion.div>
               </motion.div>
