@@ -27,7 +27,7 @@ import {
   User as UserIcon,
 } from "lucide-react";
 import ChatImageGenerator from "@/components/ChatImageGenerator";
-import ChatAttachButton from "@/components/ChatAttachButton";
+import ChatAttachButton, { AttachedFilesPreview, AttachedFile } from "@/components/ChatAttachButton";
 import angelHero from "@/assets/angel-hero.png";
 
 interface Message {
@@ -95,6 +95,7 @@ const Chat = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [mantras, setMantras] = useState<DivinMantra[]>([]);
+  const [attachedFiles, setAttachedFiles] = useState<AttachedFile[]>([]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const chatContainerRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
@@ -639,27 +640,54 @@ const Chat = () => {
           </div>
         </div>
 
-        {/* Ultra-clean Input Bar - Grok style larger */}
-        <div className="relative z-10 border-t border-[hsl(43_40%_90%)] bg-[hsl(45_40%_99%/0.95)] backdrop-blur-md px-4 md:px-8 py-5 md:py-6">
+        {/* Ultra-clean Input Bar - Grok style with attachment inside */}
+        <div className="relative z-10 border-t border-[hsl(43_40%_90%)] bg-[hsl(45_40%_99%/0.95)] backdrop-blur-md px-4 md:px-8 py-4 md:py-5">
+          {/* AI Creation Buttons - Large centered */}
+          <div className="max-w-4xl mx-auto mb-4">
+            <div className="flex items-center justify-center gap-4">
+              <ChatImageGenerator 
+                variant="button"
+                onImageGenerated={(url) => {
+                  setAttachedFiles(prev => [...prev, {
+                    url,
+                    name: "AI Generated Image",
+                    type: "image",
+                    preview: url
+                  }]);
+                }}
+              />
+            </div>
+          </div>
+
           <form onSubmit={handleSubmit} className="max-w-4xl mx-auto">
-            <div className="flex items-end gap-4">
-              {/* Attach Button (Image/File Upload) */}
-              <ChatAttachButton onImageUploaded={(url) => console.log('Uploaded:', url)} />
-              
-              {/* Input container with golden border - Larger */}
-              
-              {/* Input container with golden border - Larger */}
+            {/* Attached Files Preview - Above input */}
+            <AttachedFilesPreview 
+              files={attachedFiles} 
+              onRemove={(index) => setAttachedFiles(prev => prev.filter((_, i) => i !== index))}
+            />
+            
+            <div className="flex items-end gap-3">
+              {/* Input container with attach button inside - Grok style */}
               <div 
-                className="flex-1 relative rounded-3xl overflow-hidden"
+                className="flex-1 relative rounded-3xl overflow-hidden bg-white"
                 style={{
                   boxShadow: "0 0 0 2px hsl(43 60% 80%), 0 6px 30px hsl(43 85% 50% / 0.12)"
                 }}
               >
+                {/* Attach button inside input */}
+                <div className="absolute left-2 bottom-3 z-10">
+                  <ChatAttachButton 
+                    attachedFiles={attachedFiles}
+                    onFileAttached={(file) => setAttachedFiles(prev => [...prev, file])}
+                    onRemoveFile={(index) => setAttachedFiles(prev => prev.filter((_, i) => i !== index))}
+                  />
+                </div>
+                
                 <Textarea
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   placeholder="Hỏi Angel AI về tâm linh, FUN Ecosystem, 8 Mantras..."
-                  className="min-h-[60px] md:min-h-[70px] max-h-40 resize-none bg-white border-0 focus-visible:ring-0 focus-visible:ring-offset-0 rounded-3xl px-6 py-4 md:px-8 md:py-5 text-base md:text-lg text-[hsl(35_50%_20%)] placeholder:text-[hsl(35_30%_55%)]"
+                  className="min-h-[56px] md:min-h-[64px] max-h-40 resize-none bg-transparent border-0 focus-visible:ring-0 focus-visible:ring-offset-0 rounded-3xl pl-12 pr-6 py-4 text-base md:text-lg text-[hsl(35_50%_20%)] placeholder:text-[hsl(35_30%_55%)]"
                   onKeyDown={(e) => {
                     if (e.key === "Enter" && !e.shiftKey) {
                       e.preventDefault();
@@ -669,9 +697,9 @@ const Chat = () => {
                 />
               </div>
 
-              {/* Send button with halo pulse - Larger */}
+              {/* Send button with halo pulse */}
               <motion.div
-                animate={input.trim() ? {
+                animate={input.trim() || attachedFiles.length > 0 ? {
                   boxShadow: [
                     "0 0 20px hsl(43 85% 50% / 0.4)",
                     "0 0 40px hsl(43 85% 50% / 0.6)",
@@ -684,18 +712,18 @@ const Chat = () => {
                 <Button
                   type="submit"
                   size="icon"
-                  disabled={!input.trim() || isLoading}
-                  className="h-14 w-14 md:h-16 md:w-16 rounded-full bg-gradient-to-br from-[hsl(43_85%_55%)] to-[hsl(43_85%_45%)] hover:from-[hsl(43_85%_50%)] hover:to-[hsl(43_85%_40%)] text-white shadow-xl disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
+                  disabled={(!input.trim() && attachedFiles.length === 0) || isLoading}
+                  className="h-14 w-14 rounded-full bg-gradient-to-br from-[hsl(43_85%_55%)] to-[hsl(43_85%_45%)] hover:from-[hsl(43_85%_50%)] hover:to-[hsl(43_85%_40%)] text-white shadow-xl disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
                 >
                   {isLoading ? (
                     <motion.div
                       animate={{ rotate: 360 }}
                       transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
                     >
-                      <Sparkles className="w-6 h-6 md:w-7 md:h-7" />
+                      <Sparkles className="w-6 h-6" />
                     </motion.div>
                   ) : (
-                    <Send className="w-6 h-6 md:w-7 md:h-7" />
+                    <Send className="w-6 h-6" />
                   )}
                 </Button>
               </motion.div>

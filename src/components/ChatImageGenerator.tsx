@@ -239,31 +239,38 @@ const ChatImageGenerator = ({ onImageGenerated, variant = "button" }: ChatImageG
     );
   }
 
-  // Default button variant (original)
+  // Default button variant - Large centered buttons
   return (
     <div className="relative">
-      {/* Trigger Buttons */}
-      <div className="flex gap-2">
-        <Button
+      {/* Large Trigger Buttons - Centered */}
+      <div className="flex items-center gap-4">
+        <motion.button
           type="button"
-          variant="ghost"
-          size="icon"
+          whileHover={{ scale: 1.03 }}
+          whileTap={{ scale: 0.98 }}
           onClick={() => { setMode("image"); setIsOpen(true); }}
-          className="text-[hsl(35_70%_25%)] hover:text-[hsl(43_85%_50%)] hover:bg-[hsl(43_85%_50%/0.1)] transition-colors"
-          title="Tạo hình ảnh"
+          className="flex items-center gap-3 px-6 py-3.5 rounded-2xl bg-gradient-to-r from-[hsl(43_85%_55%)] to-[hsl(43_85%_45%)] text-white hover:from-[hsl(43_85%_50%)] hover:to-[hsl(43_85%_40%)] transition-all shadow-lg"
+          style={{
+            boxShadow: "0 4px 20px hsl(43 85% 50% / 0.3)"
+          }}
         >
           <Image className="w-5 h-5" />
-        </Button>
-        <Button
+          <span className="font-medium">Tạo Ảnh AI</span>
+        </motion.button>
+        
+        <motion.button
           type="button"
-          variant="ghost"
-          size="icon"
+          whileHover={{ scale: 1.03 }}
+          whileTap={{ scale: 0.98 }}
           onClick={() => { setMode("video"); setIsOpen(true); }}
-          className="text-[hsl(35_70%_25%)] hover:text-[hsl(43_85%_50%)] hover:bg-[hsl(43_85%_50%/0.1)] transition-colors"
-          title="Tạo video (sắp có)"
+          className="flex items-center gap-3 px-6 py-3.5 rounded-2xl bg-gradient-to-r from-[hsl(270_70%_55%)] to-[hsl(270_70%_45%)] text-white hover:from-[hsl(270_70%_50%)] hover:to-[hsl(270_70%_40%)] transition-all shadow-lg"
+          style={{
+            boxShadow: "0 4px 20px hsl(270 70% 50% / 0.3)"
+          }}
         >
           <Video className="w-5 h-5" />
-        </Button>
+          <span className="font-medium">Tạo Video AI</span>
+        </motion.button>
       </div>
 
       {/* Modal */}
