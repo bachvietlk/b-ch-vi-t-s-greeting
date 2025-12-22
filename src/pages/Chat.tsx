@@ -26,7 +26,7 @@ import {
   Flower2,
   User as UserIcon,
 } from "lucide-react";
-import ChatImageGenerator from "@/components/ChatImageGenerator";
+
 import ChatAttachButton, { AttachedFilesPreview, AttachedFile } from "@/components/ChatAttachButton";
 import angelHero from "@/assets/angel-hero.png";
 
@@ -302,16 +302,6 @@ const Chat = () => {
                   </Button>
                 </div>
                 
-                {/* AI Creation Tools Section */}
-                <div className="p-4 border-b border-[hsl(43_40%_90%)]">
-                  <h3 className="text-sm font-medium text-[hsl(35_40%_45%)] mb-3 uppercase tracking-wide">Công cụ AI</h3>
-                  <div className="space-y-2">
-                    <ChatImageGenerator 
-                      variant="sidebar"
-                      onImageGenerated={(url) => console.log('Generated:', url)} 
-                    />
-                  </div>
-                </div>
 
                 {/* Divine Mantras Section */}
                 <div className="p-4 border-b border-[hsl(43_40%_90%)]">
@@ -642,23 +632,6 @@ const Chat = () => {
 
         {/* Ultra-clean Input Bar - Grok style with attachment inside */}
         <div className="relative z-10 border-t border-[hsl(43_40%_90%)] bg-[hsl(45_40%_99%/0.95)] backdrop-blur-md px-4 md:px-8 py-4 md:py-5">
-          {/* AI Creation Buttons - Large centered */}
-          <div className="max-w-4xl mx-auto mb-4">
-            <div className="flex items-center justify-center gap-4">
-              <ChatImageGenerator 
-                variant="button"
-                onImageGenerated={(url) => {
-                  setAttachedFiles(prev => [...prev, {
-                    url,
-                    name: "AI Generated Image",
-                    type: "image",
-                    preview: url
-                  }]);
-                }}
-              />
-            </div>
-          </div>
-
           <form onSubmit={handleSubmit} className="max-w-4xl mx-auto">
             {/* Attached Files Preview - Above input */}
             <AttachedFilesPreview 
