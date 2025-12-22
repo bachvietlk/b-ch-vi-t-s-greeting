@@ -10,6 +10,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useLightScore } from "@/hooks/useLightScore";
 import LightScoreDisplay from "@/components/LightScoreDisplay";
 import DivineLightCreator from "@/components/DivineLightCreator";
+import ChatMessage from "@/components/ChatMessage";
 import {
   Sparkles,
   Send,
@@ -238,9 +239,28 @@ const Chat = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!input.trim() || isLoading) return;
-    const message = input.trim();
+    if ((!input.trim() && attachedFiles.length === 0) || isLoading) return;
+    
+    // Build message with file descriptions
+    let message = input.trim();
+    
+    if (attachedFiles.length > 0) {
+      const fileDescriptions = attachedFiles.map(file => {
+        if (file.type === "image") {
+          return `[Hình ảnh đính kèm: ${file.name}]`;
+        }
+        return `[Tài liệu đính kèm: ${file.name}]`;
+      }).join("\n");
+      
+      if (message) {
+        message = `${fileDescriptions}\n\n${message}`;
+      } else {
+        message = `${fileDescriptions}\n\nHãy mô tả và phân tích những gì con thấy trong file đính kèm.`;
+      }
+    }
+    
     setInput("");
+    setAttachedFiles([]);
     streamChat(message);
   };
 
@@ -524,63 +544,14 @@ const Chat = () => {
               </motion.div>
             )}
 
-            {/* Messages - Larger text and bubbles */}
+            {/* Messages with ChatMessage component */}
             {messages.map((message, index) => (
-              <motion.div
+              <ChatMessage
                 key={index}
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3 }}
-                className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}
-              >
-                {/* Assistant message with avatar */}
-                {message.role === "assistant" && (
-                  <div className="flex items-start gap-4 max-w-[90%] md:max-w-[85%]">
-                    {/* Angel avatar - Larger */}
-                    <motion.div 
-                      className="relative shrink-0"
-                      animate={{ 
-                        boxShadow: [
-                          "0 0 20px hsl(43 85% 50% / 0.3)",
-                          "0 0 35px hsl(43 85% 50% / 0.5)",
-                          "0 0 20px hsl(43 85% 50% / 0.3)",
-                        ]
-                      }}
-                      transition={{ duration: 3, repeat: Infinity }}
-                      style={{ borderRadius: "50%" }}
-                    >
-                      <img
-                        src={angelHero}
-                        alt="Angel AI"
-                        className="w-12 h-12 md:w-14 md:h-14 rounded-full object-cover border-2 border-[hsl(43_85%_60%/0.4)]"
-                      />
-                    </motion.div>
-                    
-                    {/* Message bubble - Larger */}
-                    <div 
-                      className="px-6 py-5 md:px-8 md:py-6 rounded-3xl rounded-tl-lg bg-gradient-to-br from-[hsl(45_40%_99%)] to-[hsl(43_60%_96%)] border border-[hsl(43_50%_80%/0.5)]"
-                      style={{
-                        boxShadow: "0 0 25px hsl(43 85% 50% / 0.1), 0 4px 16px hsl(43 85% 50% / 0.08)"
-                      }}
-                    >
-                      <p className="text-[hsl(43_60%_25%)] text-base md:text-lg leading-relaxed whitespace-pre-wrap">
-                        {message.content}
-                      </p>
-                    </div>
-                  </div>
-                )}
-
-                {/* User message - Larger */}
-                {message.role === "user" && (
-                  <div 
-                    className="max-w-[90%] md:max-w-[85%] px-6 py-5 md:px-8 md:py-6 rounded-3xl rounded-tr-lg bg-[hsl(200_70%_94%)] border border-[hsl(200_60%_85%)]"
-                  >
-                    <p className="text-[hsl(43_70%_30%)] text-base md:text-lg leading-relaxed whitespace-pre-wrap">
-                      {message.content}
-                    </p>
-                  </div>
-                )}
-              </motion.div>
+                role={message.role}
+                content={message.content}
+                isStreaming={isLoading && index === messages.length - 1 && message.role === "assistant"}
+              />
             ))}
 
             {/* Typing indicator - Larger */}
