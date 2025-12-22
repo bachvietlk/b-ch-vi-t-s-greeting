@@ -27,9 +27,7 @@ import {
   User as UserIcon,
 } from "lucide-react";
 import ChatImageGenerator from "@/components/ChatImageGenerator";
-import ImageCreationCard from "@/components/ImageCreationCard";
 import ChatAttachButton from "@/components/ChatAttachButton";
-import { Image, Video } from "lucide-react";
 import angelHero from "@/assets/angel-hero.png";
 
 interface Message {
@@ -500,32 +498,33 @@ const Chat = () => {
                   </div>
                 </motion.div>
 
-                {/* Image Creation Card - Prominent feature */}
-                <ImageCreationCard />
-
-                {/* Quick suggestions - Grok style larger buttons */}
-                <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-2xl mx-auto">
-                  {[
-                    "8 Divine Mantras là gì?",
-                    "FUN Ecosystem hoạt động như thế nào?",
-                    "Làm sao để nâng cao tần số rung động?",
-                    "Hướng dẫn thực hành sám hối và biết ơn",
-                  ].map((suggestion, i) => (
-                    <motion.div
-                      key={suggestion}
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.7 + i * 0.1 }}
-                    >
-                      <Button
-                        variant="outline"
-                        className="w-full text-base md:text-lg h-auto py-4 px-6 text-left justify-start border-2 border-[hsl(43_60%_80%)] text-[hsl(43_70%_30%)] hover:border-[hsl(43_85%_50%)] hover:bg-[hsl(43_85%_50%/0.08)] rounded-2xl transition-all duration-200"
+                {/* Quick suggestions - Clean grid layout */}
+                <div className="mt-8 max-w-2xl mx-auto">
+                  <p className="text-sm text-[hsl(35_40%_50%)] text-center mb-4">
+                    Gợi ý câu hỏi cho bạn:
+                  </p>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    {[
+                      "8 Divine Mantras là gì?",
+                      "FUN Ecosystem hoạt động như thế nào?",
+                      "Làm sao để nâng cao tần số rung động?",
+                      "Hướng dẫn thực hành sám hối và biết ơn",
+                    ].map((suggestion, i) => (
+                      <motion.button
+                        key={suggestion}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.5 + i * 0.1 }}
+                        whileHover={{ scale: 1.02, y: -2 }}
+                        whileTap={{ scale: 0.98 }}
                         onClick={() => streamChat(suggestion)}
+                        className="p-4 text-left rounded-2xl bg-white border-2 border-[hsl(43_60%_85%)] hover:border-[hsl(43_85%_55%)] hover:shadow-lg transition-all duration-200 text-sm md:text-base text-[hsl(35_50%_25%)]"
                       >
+                        <span className="text-[hsl(43_85%_50%)] mr-2">✦</span>
                         {suggestion}
-                      </Button>
-                    </motion.div>
-                  ))}
+                      </motion.button>
+                    ))}
+                  </div>
                 </div>
               </motion.div>
             )}
