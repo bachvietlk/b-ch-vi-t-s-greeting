@@ -116,44 +116,46 @@ const ChatAttachButton = ({ onImageUploaded, onFileUploaded }: ChatAttachButtonP
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="fixed inset-0 z-40"
+              className="fixed inset-0 z-[100]"
               onClick={() => setIsDropdownOpen(false)}
             />
 
-            {/* Dropdown */}
+            {/* Dropdown - positioned above input bar */}
             <motion.div
               initial={{ opacity: 0, y: 10, scale: 0.95 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 10, scale: 0.95 }}
-              className="absolute bottom-16 left-0 z-50 w-56 bg-[hsl(45_40%_99%)] rounded-2xl border border-[hsl(43_60%_80%)] shadow-xl overflow-hidden"
+              className="absolute bottom-full left-0 mb-3 z-[101] w-60 bg-white rounded-2xl border-2 border-[hsl(43_60%_80%)] shadow-2xl overflow-hidden"
               style={{
-                boxShadow: "0 10px 40px hsl(43 85% 50% / 0.15)"
+                boxShadow: "0 -10px 40px hsl(43 85% 50% / 0.2), 0 4px 20px rgba(0,0,0,0.1)"
               }}
             >
-              <div className="py-2">
+              <div className="p-2">
                 <button
                   onClick={() => handleSelectType("image")}
-                  className="w-full flex items-center gap-3 px-4 py-3 hover:bg-[hsl(43_85%_50%/0.1)] transition-colors text-left"
+                  className="w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-[hsl(43_85%_50%/0.1)] transition-colors text-left"
                 >
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[hsl(43_85%_55%)] to-[hsl(43_85%_45%)] flex items-center justify-center">
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[hsl(43_85%_55%)] to-[hsl(43_85%_45%)] flex items-center justify-center shrink-0">
                     <Image className="w-5 h-5 text-white" />
                   </div>
                   <div>
-                    <p className="font-medium text-[hsl(35_50%_20%)]">Tải ảnh lên</p>
-                    <p className="text-xs text-[hsl(35_30%_50%)]">PNG, JPG, GIF</p>
+                    <p className="font-semibold text-[hsl(35_50%_20%)]">Tải ảnh lên</p>
+                    <p className="text-xs text-[hsl(35_30%_50%)]">PNG, JPG, GIF tối đa 10MB</p>
                   </div>
                 </button>
 
+                <div className="h-px bg-[hsl(43_50%_90%)] mx-3 my-1" />
+
                 <button
                   onClick={() => handleSelectType("file")}
-                  className="w-full flex items-center gap-3 px-4 py-3 hover:bg-[hsl(43_85%_50%/0.1)] transition-colors text-left"
+                  className="w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-[hsl(200_70%_50%/0.1)] transition-colors text-left"
                 >
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[hsl(200_70%_50%)] to-[hsl(200_70%_40%)] flex items-center justify-center">
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[hsl(200_70%_55%)] to-[hsl(200_70%_45%)] flex items-center justify-center shrink-0">
                     <FileText className="w-5 h-5 text-white" />
                   </div>
                   <div>
-                    <p className="font-medium text-[hsl(35_50%_20%)]">Tải file lên</p>
-                    <p className="text-xs text-[hsl(35_30%_50%)]">PDF, DOC, TXT...</p>
+                    <p className="font-semibold text-[hsl(35_50%_20%)]">Tải tài liệu</p>
+                    <p className="text-xs text-[hsl(35_30%_50%)]">PDF, DOC, TXT tối đa 50MB</p>
                   </div>
                 </button>
               </div>
