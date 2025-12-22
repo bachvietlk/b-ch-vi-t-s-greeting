@@ -114,55 +114,58 @@ const ChatAttachButton = ({ onFileAttached, attachedFiles = [], onRemoveFile }: 
           )}
         </Button>
 
-        {/* Dropdown Menu */}
+        {/* Dropdown Menu - Using Portal-like fixed positioning */}
         <AnimatePresence>
           {isDropdownOpen && (
             <>
               {/* Backdrop */}
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                className="fixed inset-0 z-[100]"
+              <div
+                className="fixed inset-0 z-[9998]"
                 onClick={() => setIsDropdownOpen(false)}
               />
 
-              {/* Dropdown - positioned above */}
+              {/* Dropdown - Fixed positioned to avoid clipping */}
               <motion.div
                 initial={{ opacity: 0, y: 10, scale: 0.95 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                className="absolute bottom-full left-0 mb-2 z-[101] w-56 bg-white rounded-2xl border-2 border-[hsl(43_60%_80%)] shadow-2xl overflow-hidden"
+                transition={{ duration: 0.15 }}
+                className="fixed left-4 md:left-auto z-[9999] w-64 bg-white rounded-2xl border-2 border-[hsl(43_60%_75%)] overflow-hidden"
                 style={{
-                  boxShadow: "0 -10px 40px hsl(43 85% 50% / 0.15), 0 4px 20px rgba(0,0,0,0.1)"
+                  bottom: "calc(100px)",
+                  boxShadow: "0 -10px 50px hsl(43 85% 50% / 0.2), 0 8px 30px rgba(0,0,0,0.15)"
                 }}
               >
-                <div className="p-1.5">
+                <div className="p-2">
+                  <p className="text-xs font-medium text-[hsl(35_40%_50%)] px-3 py-2 uppercase tracking-wide">
+                    Đính kèm
+                  </p>
+                  
                   <button
                     onClick={() => handleSelectType("image")}
-                    className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-[hsl(43_85%_50%/0.1)] transition-colors text-left"
+                    className="w-full flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-[hsl(43_85%_50%/0.1)] transition-colors text-left"
                   >
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[hsl(43_85%_55%)] to-[hsl(43_85%_45%)] flex items-center justify-center shrink-0">
-                      <Image className="w-4 h-4 text-white" />
+                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[hsl(43_85%_55%)] to-[hsl(43_85%_45%)] flex items-center justify-center shrink-0 shadow-md">
+                      <Image className="w-5 h-5 text-white" />
                     </div>
                     <div>
                       <p className="font-medium text-sm text-[hsl(35_50%_20%)]">Ảnh</p>
-                      <p className="text-xs text-[hsl(35_30%_55%)]">PNG, JPG, GIF</p>
+                      <p className="text-xs text-[hsl(35_30%_55%)]">PNG, JPG, GIF - Tối đa 10MB</p>
                     </div>
                   </button>
 
-                  <div className="h-px bg-[hsl(43_50%_90%)] mx-2 my-0.5" />
+                  <div className="h-px bg-[hsl(43_50%_88%)] mx-3 my-1" />
 
                   <button
                     onClick={() => handleSelectType("file")}
-                    className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-[hsl(200_70%_50%/0.1)] transition-colors text-left"
+                    className="w-full flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-[hsl(200_70%_50%/0.1)] transition-colors text-left"
                   >
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[hsl(200_70%_55%)] to-[hsl(200_70%_45%)] flex items-center justify-center shrink-0">
-                      <FileText className="w-4 h-4 text-white" />
+                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[hsl(200_70%_55%)] to-[hsl(200_70%_45%)] flex items-center justify-center shrink-0 shadow-md">
+                      <FileText className="w-5 h-5 text-white" />
                     </div>
                     <div>
                       <p className="font-medium text-sm text-[hsl(35_50%_20%)]">Tài liệu</p>
-                      <p className="text-xs text-[hsl(35_30%_55%)]">PDF, DOC, TXT</p>
+                      <p className="text-xs text-[hsl(35_30%_55%)]">PDF, DOC, TXT - Tối đa 50MB</p>
                     </div>
                   </button>
                 </div>
