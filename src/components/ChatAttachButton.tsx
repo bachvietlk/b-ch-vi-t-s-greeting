@@ -9,7 +9,9 @@ import {
   FileText, 
   X, 
   Loader2, 
-  CheckCircle2
+  CheckCircle2,
+  Sparkles,
+  Video
 } from "lucide-react";
 
 export interface AttachedFile {
@@ -19,13 +21,17 @@ export interface AttachedFile {
   preview?: string;
 }
 
+export type MenuAction = "image" | "file" | "generate-image" | "generate-video";
+
 interface ChatAttachButtonProps {
   onFileAttached?: (file: AttachedFile) => void;
   attachedFiles?: AttachedFile[];
   onRemoveFile?: (index: number) => void;
+  onGenerateImage?: () => void;
+  onGenerateVideo?: () => void;
 }
 
-const ChatAttachButton = ({ onFileAttached, attachedFiles = [], onRemoveFile }: ChatAttachButtonProps) => {
+const ChatAttachButton = ({ onFileAttached, attachedFiles = [], onRemoveFile, onGenerateImage, onGenerateVideo }: ChatAttachButtonProps) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [uploadType, setUploadType] = useState<"image" | "file">("image");
@@ -49,9 +55,20 @@ const ChatAttachButton = ({ onFileAttached, attachedFiles = [], onRemoveFile }: 
     }
   });
 
-  const handleSelectType = (type: "image" | "file") => {
-    setUploadType(type);
+  const handleSelectType = (action: MenuAction) => {
     setIsDropdownOpen(false);
+    
+    if (action === "generate-image") {
+      onGenerateImage?.();
+      return;
+    }
+    
+    if (action === "generate-video") {
+      onGenerateVideo?.();
+      return;
+    }
+    
+    setUploadType(action);
     // Trigger file input immediately
     setTimeout(() => {
       fileInputRef.current?.click();
@@ -137,8 +154,42 @@ const ChatAttachButton = ({ onFileAttached, attachedFiles = [], onRemoveFile }: 
                 }}
               >
                 <div className="p-2">
+                  {/* Tạo nội dung AI */}
+                  <p className="text-xs font-medium text-[hsl(280_60%_50%)] px-3 py-2 uppercase tracking-wide">
+                    ✨ Tạo với AI
+                  </p>
+                  
+                  <button
+                    onClick={() => handleSelectType("generate-image")}
+                    className="w-full flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-[hsl(280_70%_50%/0.1)] transition-colors text-left"
+                  >
+                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[hsl(280_70%_55%)] to-[hsl(320_70%_50%)] flex items-center justify-center shrink-0 shadow-md">
+                      <Sparkles className="w-5 h-5 text-white" />
+                    </div>
+                    <div>
+                      <p className="font-medium text-sm text-[hsl(35_50%_20%)]">Tạo Ảnh AI</p>
+                      <p className="text-xs text-[hsl(35_30%_55%)]">Tạo ảnh từ mô tả văn bản</p>
+                    </div>
+                  </button>
+
+                  <button
+                    onClick={() => handleSelectType("generate-video")}
+                    className="w-full flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-[hsl(200_70%_50%/0.1)] transition-colors text-left"
+                  >
+                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[hsl(200_70%_55%)] to-[hsl(240_70%_55%)] flex items-center justify-center shrink-0 shadow-md">
+                      <Video className="w-5 h-5 text-white" />
+                    </div>
+                    <div>
+                      <p className="font-medium text-sm text-[hsl(35_50%_20%)]">Tạo Video AI</p>
+                      <p className="text-xs text-[hsl(35_30%_55%)]">Sắp ra mắt</p>
+                    </div>
+                  </button>
+
+                  <div className="h-px bg-[hsl(43_50%_88%)] mx-3 my-2" />
+
+                  {/* Đính kèm file */}
                   <p className="text-xs font-medium text-[hsl(35_40%_50%)] px-3 py-2 uppercase tracking-wide">
-                    Đính kèm
+                    📎 Đính kèm
                   </p>
                   
                   <button
@@ -150,11 +201,9 @@ const ChatAttachButton = ({ onFileAttached, attachedFiles = [], onRemoveFile }: 
                     </div>
                     <div>
                       <p className="font-medium text-sm text-[hsl(35_50%_20%)]">Ảnh</p>
-                      <p className="text-xs text-[hsl(35_30%_55%)]">PNG, JPG, GIF - Tối đa 10MB</p>
+                      <p className="text-xs text-[hsl(35_30%_55%)]">PNG, JPG, GIF</p>
                     </div>
                   </button>
-
-                  <div className="h-px bg-[hsl(43_50%_88%)] mx-3 my-1" />
 
                   <button
                     onClick={() => handleSelectType("file")}
@@ -165,7 +214,7 @@ const ChatAttachButton = ({ onFileAttached, attachedFiles = [], onRemoveFile }: 
                     </div>
                     <div>
                       <p className="font-medium text-sm text-[hsl(35_50%_20%)]">Tài liệu</p>
-                      <p className="text-xs text-[hsl(35_30%_55%)]">PDF, DOC, TXT - Tối đa 50MB</p>
+                      <p className="text-xs text-[hsl(35_30%_55%)]">PDF, DOC, TXT</p>
                     </div>
                   </button>
                 </div>
