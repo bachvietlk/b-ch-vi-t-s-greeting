@@ -19,6 +19,7 @@ export interface AttachedFile {
   name: string;
   type: "image" | "file";
   preview?: string;
+  file?: File; // Original file for Vision AI
 }
 
 export type MenuAction = "image" | "file" | "generate-image" | "generate-video";
@@ -36,21 +37,26 @@ const ChatAttachButton = ({ onFileAttached, attachedFiles = [], onRemoveFile, on
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [uploadType, setUploadType] = useState<"image" | "file">("image");
 
+  const [lastSelectedFile, setLastSelectedFile] = useState<File | null>(null);
+
   const { uploadFile, isUploading, progress } = useR2Upload({
     folder: uploadType === "image" ? 'chat-images' : 'chat-files',
     onSuccess: (result) => {
       if (result.url) {
-        const file: AttachedFile = {
+        const attachedFile: AttachedFile = {
           url: result.url,
           name: result.originalName || "file",
           type: uploadType,
-          preview: uploadType === "image" ? result.url : undefined
+          preview: uploadType === "image" ? result.url : undefined,
+          file: lastSelectedFile || undefined
         };
-        onFileAttached?.(file);
+        onFileAttached?.(attachedFile);
+        setLastSelectedFile(null);
         toast.success("Đã đính kèm file!");
       }
     },
     onError: (error) => {
+      setLastSelectedFile(null);
       toast.error(`Lỗi: ${error}`);
     }
   });
@@ -95,6 +101,7 @@ const ChatAttachButton = ({ onFileAttached, attachedFiles = [], onRemoveFile, on
       }
     }
 
+    setLastSelectedFile(file);
     await uploadFile(file);
     
     // Reset input

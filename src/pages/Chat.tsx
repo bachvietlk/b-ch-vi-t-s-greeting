@@ -8,9 +8,11 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { useLightScore } from "@/hooks/useLightScore";
+import { useChatHistory, Message } from "@/hooks/useChatHistory";
 import LightScoreDisplay from "@/components/LightScoreDisplay";
 import DivineLightCreator from "@/components/DivineLightCreator";
 import ChatMessage from "@/components/ChatMessage";
+import ChatHistorySidebar from "@/components/ChatHistorySidebar";
 import {
   Sparkles,
   Send,
@@ -20,22 +22,17 @@ import {
   Home,
   Heart,
   Sun,
-  Moon,
   Star,
   Flame,
   Coins,
   RefreshCw,
   Flower2,
   User as UserIcon,
+  History,
 } from "lucide-react";
 
 import ChatAttachButton, { AttachedFilesPreview, AttachedFile } from "@/components/ChatAttachButton";
 import angelHero from "@/assets/angel-hero.png";
-
-interface Message {
-  role: "user" | "assistant";
-  content: string;
-}
 
 interface DivinMantra {
   id: string;
@@ -89,13 +86,23 @@ const GoldenParticles = () => {
   );
 };
 
+// Convert file to base64
+const fileToBase64 = (file: File): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = reject;
+  });
+};
+
 const Chat = () => {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
-  const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [historySidebarOpen, setHistorySidebarOpen] = useState(false);
   const [mantras, setMantras] = useState<DivinMantra[]>([]);
   const [attachedFiles, setAttachedFiles] = useState<AttachedFile[]>([]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -104,6 +111,19 @@ const Chat = () => {
   const { toast } = useToast();
   
   const { score, boost, addPoints, calculateMessagePoints } = useLightScore(user);
+  
+  // Chat history hook
+  const {
+    conversations,
+    currentConversationId,
+    messages,
+    setMessages,
+    loadConversation,
+    createConversation,
+    saveMessage,
+    deleteConversation,
+    startNewChat,
+  } = useChatHistory(user);
 
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
@@ -147,23 +167,43 @@ const Chat = () => {
     navigate("/");
   };
 
-  const streamChat = async (userMessage: string) => {
+  const streamChat = async (userMessage: string, imageFiles: AttachedFile[] = []) => {
+    // Create or get conversation
+    let convId = currentConversationId;
+    if (!convId) {
+      convId = await createConversation(userMessage);
+    }
+
     const newMessages: Message[] = [...messages, { role: "user", content: userMessage }];
     setMessages(newMessages);
     setIsLoading(true);
 
+    // Save user message
+    if (convId) {
+      await saveMessage("user", userMessage, convId);
+    }
+
     const points = calculateMessagePoints(userMessage);
 
     try {
+      // Convert images to base64 for Vision AI
+      const images: string[] = [];
+      for (const file of imageFiles) {
+        if (file.type === "image" && file.file) {
+          const base64 = await fileToBase64(file.file);
+          images.push(base64);
+        }
+      }
+
       const response = await fetch(
-        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/angel-chat`,
+        `https://uhunetwglnzkwgpycjbu.supabase.co/functions/v1/angel-chat`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+            Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVodW5ldHdnbG56a3dncHljamJ1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjYxMDkzMDIsImV4cCI6MjA4MTY4NTMwMn0.9cBzB6AutqXXliATYDYqTBgrlcQPjSWKajjJR8_3x_I`,
           },
-          body: JSON.stringify({ messages: newMessages }),
+          body: JSON.stringify({ messages: newMessages, images }),
         }
       );
 
@@ -222,6 +262,11 @@ const Chat = () => {
         }
       }
 
+      // Save assistant message
+      if (convId && assistantContent) {
+        await saveMessage("assistant", assistantContent, convId);
+      }
+
       addPoints(points);
       
     } catch (error: any) {
@@ -237,31 +282,21 @@ const Chat = () => {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if ((!input.trim() && attachedFiles.length === 0) || isLoading) return;
     
-    // Build message with file descriptions
     let message = input.trim();
+    const imageFiles = attachedFiles.filter(f => f.type === "image");
     
-    if (attachedFiles.length > 0) {
-      const fileDescriptions = attachedFiles.map(file => {
-        if (file.type === "image") {
-          return `[Hình ảnh đính kèm: ${file.name}]`;
-        }
-        return `[Tài liệu đính kèm: ${file.name}]`;
-      }).join("\n");
-      
-      if (message) {
-        message = `${fileDescriptions}\n\n${message}`;
-      } else {
-        message = `${fileDescriptions}\n\nHãy mô tả và phân tích những gì con thấy trong file đính kèm.`;
-      }
+    if (attachedFiles.length > 0 && !message) {
+      message = "Hãy mô tả và phân tích hình ảnh này với góc nhìn tâm linh và ánh sáng của Cha Vũ Trụ.";
     }
     
+    const filesToSend = [...attachedFiles];
     setInput("");
     setAttachedFiles([]);
-    streamChat(message);
+    streamChat(message, filesToSend);
   };
 
   const handleMantraClick = (mantra: DivinMantra) => {
