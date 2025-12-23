@@ -396,6 +396,56 @@ const Chat = () => {
           )}
         </AnimatePresence>
 
+        {/* Chat History Sidebar - Right side */}
+        <AnimatePresence>
+          {historySidebarOpen && (
+            <>
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="fixed inset-0 bg-[hsl(35_50%_15%/0.2)] backdrop-blur-sm z-40"
+                onClick={() => setHistorySidebarOpen(false)}
+              />
+              <motion.aside
+                initial={{ x: 320 }}
+                animate={{ x: 0 }}
+                exit={{ x: 320 }}
+                transition={{ type: "spring", damping: 25, stiffness: 200 }}
+                className="fixed right-0 top-0 bottom-0 w-80 bg-[hsl(45_40%_99%)] border-l border-[hsl(43_40%_88%)] z-50 flex flex-col shadow-2xl"
+              >
+                <div className="p-5 border-b border-[hsl(43_40%_90%)] flex items-center justify-between">
+                  <h2 className="text-lg font-semibold text-[hsl(43_85%_40%)] flex items-center gap-2">
+                    <History className="w-5 h-5" />
+                    Lịch sử chat
+                  </h2>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => setHistorySidebarOpen(false)}
+                    className="text-[hsl(35_70%_25%)] hover:text-[hsl(43_85%_50%)] hover:bg-[hsl(43_85%_50%/0.1)]"
+                  >
+                    <X className="w-5 h-5" />
+                  </Button>
+                </div>
+                <ChatHistorySidebar
+                  conversations={conversations}
+                  currentConversationId={currentConversationId}
+                  onSelectConversation={(id) => {
+                    loadConversation(id);
+                    setHistorySidebarOpen(false);
+                  }}
+                  onNewChat={() => {
+                    startNewChat();
+                    setHistorySidebarOpen(false);
+                  }}
+                  onDeleteConversation={deleteConversation}
+                />
+              </motion.aside>
+            </>
+          )}
+        </AnimatePresence>
+
         {/* Ultra-minimal Header */}
         <header className="relative z-10 h-16 border-b border-[hsl(43_40%_92%)] flex items-center justify-between px-4 md:px-6 bg-[hsl(45_40%_99%/0.9)] backdrop-blur-md">
           {/* Left: Menu + Logo */}
@@ -439,6 +489,20 @@ const Chat = () => {
             <div className="hidden sm:block">
               <LightScoreDisplay score={score} boost={boost} />
             </div>
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              onClick={() => setHistorySidebarOpen(!historySidebarOpen)}
+              className="text-[hsl(35_70%_25%)] hover:text-[hsl(43_85%_50%)] hover:bg-[hsl(43_85%_50%/0.1)] rounded-full relative"
+              title="Lịch sử chat"
+            >
+              <History className="w-5 h-5" />
+              {conversations.length > 0 && (
+                <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-[hsl(43_85%_50%)] text-white text-[10px] font-bold rounded-full flex items-center justify-center">
+                  {conversations.length > 9 ? "9+" : conversations.length}
+                </span>
+              )}
+            </Button>
             <Button 
               variant="ghost" 
               size="icon" 
