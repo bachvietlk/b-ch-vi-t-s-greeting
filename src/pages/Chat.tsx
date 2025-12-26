@@ -29,6 +29,9 @@ import {
   Flower2,
   User as UserIcon,
   History,
+  Image,
+  Video,
+  MessageCircle,
 } from "lucide-react";
 
 import ChatAttachButton, { AttachedFilesPreview, AttachedFile } from "@/components/ChatAttachButton";
@@ -340,14 +343,14 @@ const Chat = () => {
                 onClick={() => setSidebarOpen(false)}
               />
               <motion.aside
-                initial={{ x: -320 }}
+                initial={{ x: -300 }}
                 animate={{ x: 0 }}
-                exit={{ x: -320 }}
+                exit={{ x: -300 }}
                 transition={{ type: "spring", damping: 25, stiffness: 200 }}
-                className="fixed left-0 top-0 bottom-0 w-80 bg-[hsl(45_40%_99%)] border-r border-[hsl(43_40%_88%)] z-50 flex flex-col shadow-2xl"
+                className="fixed left-0 top-0 bottom-0 w-[85vw] max-w-80 bg-[hsl(45_40%_99%)] border-r border-[hsl(43_40%_88%)] z-50 flex flex-col shadow-2xl"
               >
-                <div className="p-5 border-b border-[hsl(43_40%_90%)] flex items-center justify-between">
-                  <h2 className="text-lg font-semibold text-[hsl(43_85%_40%)]">Menu</h2>
+                <div className="p-4 md:p-5 border-b border-[hsl(43_40%_90%)] flex items-center justify-between">
+                  <h2 className="text-base md:text-lg font-semibold text-[hsl(43_85%_40%)]">Menu</h2>
                   <Button
                     variant="ghost"
                     size="icon"
@@ -358,12 +361,84 @@ const Chat = () => {
                   </Button>
                 </div>
                 
+                {/* AI Tools Section - Moved from elsewhere */}
+                <div className="p-3 md:p-4 border-b border-[hsl(43_40%_90%)] space-y-2">
+                  <h3 className="text-xs font-medium text-[hsl(35_40%_45%)] mb-2 uppercase tracking-wide">Công cụ AI</h3>
+                  
+                  {/* Create Image AI */}
+                  <motion.button
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={() => {
+                      setSidebarOpen(false);
+                      toast({
+                        title: "✨ Tạo Ảnh AI",
+                        description: "Sử dụng khung 'Đồng Sáng Tạo Ánh Sáng' trong chat để tạo ảnh",
+                      });
+                    }}
+                    className="w-full flex items-center gap-3 p-3 rounded-xl bg-gradient-to-r from-[hsl(43_85%_55%)] to-[hsl(43_85%_45%)] text-white hover:from-[hsl(43_85%_50%)] hover:to-[hsl(43_85%_40%)] transition-all shadow-lg"
+                  >
+                    <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
+                      <Image className="w-4 h-4" />
+                    </div>
+                    <div className="text-left">
+                      <p className="font-medium text-sm">Tạo Ảnh AI</p>
+                      <p className="text-[10px] opacity-80">Tạo hình ảnh từ mô tả</p>
+                    </div>
+                  </motion.button>
+
+                  {/* Create Video AI */}
+                  <motion.button
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={() => {
+                      setSidebarOpen(false);
+                      toast({
+                        title: "🎬 Tạo Video AI",
+                        description: "Tính năng sắp ra mắt!",
+                      });
+                    }}
+                    className="w-full flex items-center gap-3 p-3 rounded-xl bg-gradient-to-r from-[hsl(270_70%_55%)] to-[hsl(270_70%_45%)] text-white hover:from-[hsl(270_70%_50%)] hover:to-[hsl(270_70%_40%)] transition-all shadow-lg"
+                  >
+                    <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
+                      <Video className="w-4 h-4" />
+                    </div>
+                    <div className="text-left">
+                      <p className="font-medium text-sm">Tạo Video AI</p>
+                      <p className="text-[10px] opacity-80">Sắp ra mắt ✨</p>
+                    </div>
+                  </motion.button>
+
+                  {/* Chat History */}
+                  <motion.button
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={() => {
+                      setSidebarOpen(false);
+                      setHistorySidebarOpen(true);
+                    }}
+                    className="w-full flex items-center gap-3 p-3 rounded-xl bg-gradient-to-r from-[hsl(200_70%_50%)] to-[hsl(200_70%_40%)] text-white hover:from-[hsl(200_70%_45%)] hover:to-[hsl(200_70%_35%)] transition-all shadow-lg"
+                  >
+                    <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center relative">
+                      <History className="w-4 h-4" />
+                      {conversations.length > 0 && (
+                        <span className="absolute -top-1 -right-1 w-4 h-4 bg-white text-[hsl(200_70%_50%)] text-[9px] font-bold rounded-full flex items-center justify-center">
+                          {conversations.length > 9 ? "9+" : conversations.length}
+                        </span>
+                      )}
+                    </div>
+                    <div className="text-left">
+                      <p className="font-medium text-sm">Lịch sử Chat</p>
+                      <p className="text-[10px] opacity-80">{conversations.length} cuộc trò chuyện</p>
+                    </div>
+                  </motion.button>
+                </div>
 
                 {/* Divine Mantras Section */}
-                <div className="p-4 border-b border-[hsl(43_40%_90%)]">
-                  <h3 className="text-sm font-medium text-[hsl(35_40%_45%)] mb-3 uppercase tracking-wide">8 Divine Mantras</h3>
+                <div className="p-3 md:p-4 border-b border-[hsl(43_40%_90%)]">
+                  <h3 className="text-xs font-medium text-[hsl(35_40%_45%)] uppercase tracking-wide">8 Divine Mantras</h3>
                 </div>
-                <div className="flex-1 overflow-y-auto p-4 space-y-3">
+                <div className="flex-1 overflow-y-auto p-3 md:p-4 space-y-2 md:space-y-3">
                   {mantras.map((mantra, index) => {
                     const Icon = mantraIcons[index] || Heart;
                     return (
@@ -372,17 +447,17 @@ const Chat = () => {
                         whileHover={{ scale: 1.02, x: 4 }}
                         whileTap={{ scale: 0.98 }}
                         onClick={() => handleMantraClick(mantra)}
-                        className="w-full p-4 rounded-2xl bg-[hsl(43_70%_96%)] hover:bg-[hsl(43_70%_94%)] border border-[hsl(43_40%_90%)] text-left transition-all duration-200 group"
+                        className="w-full p-3 md:p-4 rounded-xl md:rounded-2xl bg-[hsl(43_70%_96%)] hover:bg-[hsl(43_70%_94%)] border border-[hsl(43_40%_90%)] text-left transition-all duration-200 group"
                       >
-                        <div className="flex items-start gap-3">
-                          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[hsl(43_85%_55%)] to-[hsl(43_85%_45%)] flex items-center justify-center shrink-0 shadow-lg">
-                            <Icon className="w-5 h-5 text-white" />
+                        <div className="flex items-start gap-2 md:gap-3">
+                          <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-gradient-to-br from-[hsl(43_85%_55%)] to-[hsl(43_85%_45%)] flex items-center justify-center shrink-0 shadow-lg">
+                            <Icon className="w-4 h-4 md:w-5 md:h-5 text-white" />
                           </div>
-                          <div>
-                            <p className="text-sm font-semibold text-[hsl(35_50%_20%)]">
+                          <div className="min-w-0 flex-1">
+                            <p className="text-xs md:text-sm font-semibold text-[hsl(35_50%_20%)] truncate">
                               {mantra.order_index}. {mantra.title_vi}
                             </p>
-                            <p className="text-xs text-[hsl(35_30%_45%)] mt-1 line-clamp-2">
+                            <p className="text-[10px] md:text-xs text-[hsl(35_30%_45%)] mt-0.5 md:mt-1 line-clamp-2">
                               {mantra.content_vi}
                             </p>
                           </div>
@@ -412,10 +487,10 @@ const Chat = () => {
                 animate={{ x: 0 }}
                 exit={{ x: 320 }}
                 transition={{ type: "spring", damping: 25, stiffness: 200 }}
-                className="fixed right-0 top-0 bottom-0 w-80 bg-[hsl(45_40%_99%)] border-l border-[hsl(43_40%_88%)] z-50 flex flex-col shadow-2xl"
+                className="fixed right-0 top-0 bottom-0 w-72 md:w-80 bg-[hsl(45_40%_99%)] border-l border-[hsl(43_40%_88%)] z-50 flex flex-col shadow-2xl"
               >
-                <div className="p-5 border-b border-[hsl(43_40%_90%)] flex items-center justify-between">
-                  <h2 className="text-lg font-semibold text-[hsl(43_85%_40%)] flex items-center gap-2">
+                <div className="p-4 md:p-5 border-b border-[hsl(43_40%_90%)] flex items-center justify-between">
+                  <h2 className="text-base md:text-lg font-semibold text-[hsl(43_85%_40%)] flex items-center gap-2">
                     <History className="w-5 h-5" />
                     Lịch sử chat
                   </h2>
@@ -485,15 +560,16 @@ const Chat = () => {
           </div>
 
           {/* Right: Light Score + Actions */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1 md:gap-2">
             <div className="hidden sm:block">
               <LightScoreDisplay score={score} boost={boost} />
             </div>
+            {/* History button - only show on larger screens, mobile uses menu */}
             <Button 
               variant="ghost" 
               size="icon" 
               onClick={() => setHistorySidebarOpen(!historySidebarOpen)}
-              className="text-[hsl(35_70%_25%)] hover:text-[hsl(43_85%_50%)] hover:bg-[hsl(43_85%_50%/0.1)] rounded-full relative"
+              className="hidden md:flex text-[hsl(35_70%_25%)] hover:text-[hsl(43_85%_50%)] hover:bg-[hsl(43_85%_50%/0.1)] rounded-full relative"
               title="Lịch sử chat"
             >
               <History className="w-5 h-5" />
