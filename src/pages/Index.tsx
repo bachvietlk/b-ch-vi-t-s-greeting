@@ -8,6 +8,7 @@ import MissionVisionValuesSection from "@/components/MissionVisionValuesSection"
 import FunEcosystemSection from "@/components/FunEcosystemSection";
 import CoreValuesSection from "@/components/CoreValuesSection";
 import MantrasSection from "@/components/MantrasSection";
+import TestimonialsSection from "@/components/TestimonialsSection";
 import FooterSection from "@/components/FooterSection";
 
 const Index = () => {
@@ -49,6 +50,10 @@ const Index = () => {
 
         <section id="ecosystem">
           <FunEcosystemSection />
+        </section>
+
+        <section id="testimonials">
+          <TestimonialsSection />
         </section>
 
         <section id="mantras">
