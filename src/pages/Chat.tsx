@@ -11,6 +11,7 @@ import { useLightScore } from "@/hooks/useLightScore";
 import { useChatHistory, Message } from "@/hooks/useChatHistory";
 import LightScoreDisplay from "@/components/LightScoreDisplay";
 import DivineLightCreator from "@/components/DivineLightCreator";
+import DivineLightVideoCreator from "@/components/DivineLightVideoCreator";
 import ChatMessage from "@/components/ChatMessage";
 import ChatHistorySidebar from "@/components/ChatHistorySidebar";
 import {
@@ -393,10 +394,18 @@ const Chat = () => {
                     whileTap={{ scale: 0.98 }}
                     onClick={() => {
                       setSidebarOpen(false);
-                      toast({
-                        title: "🎬 Tạo Video AI",
-                        description: "Tính năng sắp ra mắt!",
-                      });
+                      // Scroll to video creator if messages are empty, otherwise show toast
+                      if (messages.length === 0) {
+                        toast({
+                          title: "🎬 Tạo Video Ánh Sáng",
+                          description: "Cuộn xuống để sử dụng khung 'Đồng Sáng Tạo Video Ánh Sáng' trong chat",
+                        });
+                      } else {
+                        toast({
+                          title: "🎬 Tạo Video Ánh Sáng",
+                          description: "Bắt đầu cuộc chat mới để tạo video. Nhấn 'Lịch sử Chat' > 'Cuộc trò chuyện mới'",
+                        });
+                      }
                     }}
                     className="w-full flex items-center gap-3 p-3 rounded-xl bg-gradient-to-r from-[hsl(270_70%_55%)] to-[hsl(270_70%_45%)] text-white hover:from-[hsl(270_70%_50%)] hover:to-[hsl(270_70%_40%)] transition-all shadow-lg"
                   >
@@ -405,7 +414,7 @@ const Chat = () => {
                     </div>
                     <div className="text-left">
                       <p className="font-medium text-sm">Tạo Video AI</p>
-                      <p className="text-[10px] opacity-80">Sắp ra mắt ✨</p>
+                      <p className="text-[10px] opacity-80">Miễn phí 5 video/ngày ✨</p>
                     </div>
                   </motion.button>
 
@@ -685,8 +694,9 @@ const Chat = () => {
                   </div>
                 </motion.div>
 
-                {/* Divine Light Creator Card */}
+                {/* Divine Light Creator Cards - Image and Video */}
                 <DivineLightCreator onPointsEarned={addPoints} />
+                <DivineLightVideoCreator onPointsEarned={addPoints} />
 
                 {/* Quick suggestions - Clean grid layout */}
                 <div className="mt-8 max-w-2xl mx-auto">
