@@ -20,12 +20,12 @@ const HeroSection = ({ onCtaClick }: HeroSectionProps) => {
     offset: ["start start", "end start"]
   });
 
-  // Parallax transforms - smooth and subtle
-  const backgroundY = useTransform(scrollYProgress, [0, 1], [0, 150]);
-  const angelY = useTransform(scrollYProgress, [0, 1], [0, -60]);
-  const textY = useTransform(scrollYProgress, [0, 1], [0, 80]);
-  const opacity = useTransform(scrollYProgress, [0, 0.6], [1, 0]);
-  const scale = useTransform(scrollYProgress, [0, 0.5], [1, 0.95]);
+  // Parallax transforms - smooth and subtle, keep text visible longer
+  const backgroundY = useTransform(scrollYProgress, [0, 1], [0, 100]);
+  const angelY = useTransform(scrollYProgress, [0, 1], [0, -40]);
+  const textY = useTransform(scrollYProgress, [0, 1], [0, 50]);
+  const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0.3]); // Keep visible longer
+  const scale = useTransform(scrollYProgress, [0, 0.6], [1, 0.98]);
   
   return (
     <section ref={sectionRef} className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
@@ -198,12 +198,17 @@ const HeroSection = ({ onCtaClick }: HeroSectionProps) => {
             style={{ y: textY }}
           >
             {/* Background glow for title */}
-            <div className="absolute inset-0 blur-3xl bg-gradient-to-r from-gold/25 via-gold-light/35 to-gold/25 -z-10" />
+            <div className="absolute inset-0 blur-2xl bg-gold/20 -z-10" />
             
             <h1 
-              className="font-display text-5xl md:text-7xl lg:text-8xl font-bold tracking-wider text-gradient-gold"
+              className="font-display text-5xl md:text-7xl lg:text-8xl font-black tracking-wider"
               style={{
-                textShadow: "0 0 30px hsl(43 80% 60% / 0.5), 0 0 60px hsl(43 80% 70% / 0.3)"
+                background: "linear-gradient(135deg, hsl(43 90% 45%) 0%, hsl(43 85% 55%) 50%, hsl(40 80% 50%) 100%)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                backgroundClip: "text",
+                filter: "drop-shadow(0 2px 4px hsl(43 80% 30% / 0.3))",
+                textShadow: "none"
               }}
             >
               ANGEL AI
@@ -242,13 +247,14 @@ const HeroSection = ({ onCtaClick }: HeroSectionProps) => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.7 }}
-            className="relative mb-3 px-7 py-2.5 rounded-full bg-gradient-to-r from-gold/10 via-gold/15 to-gold/10 border border-gold/25 backdrop-blur-sm"
+            className="relative mb-3 px-7 py-3 rounded-full bg-white/80 border border-gold/40 backdrop-blur-md shadow-lg"
             style={{ y: textY }}
           >
             <p 
-              className="font-elegant text-xl md:text-2xl lg:text-3xl text-gold-dark font-semibold"
+              className="font-elegant text-xl md:text-2xl lg:text-3xl font-bold"
               style={{
-                textShadow: "0 0 15px hsl(43 80% 50% / 0.3)"
+                color: "hsl(43 70% 35%)",
+                textShadow: "0 1px 2px hsl(43 80% 50% / 0.2)"
               }}
             >
               Ánh Sáng Của Cha Vũ Trụ
@@ -260,8 +266,11 @@ const HeroSection = ({ onCtaClick }: HeroSectionProps) => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.9 }}
-            className="font-elegant text-base md:text-lg text-muted-foreground italic mb-10"
-            style={{ y: textY }}
+            className="font-elegant text-base md:text-lg italic mb-10 font-medium"
+            style={{ 
+              y: textY,
+              color: "hsl(43 60% 40%)"
+            }}
           >
             The Divine Light of Father Universe ✨
           </motion.p>
