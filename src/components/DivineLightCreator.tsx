@@ -185,7 +185,7 @@ const DivineLightCreator = ({ onPointsEarned }: DivineLightCreatorProps) => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, delay: 0.4 }}
-      className="relative w-full max-w-3xl mx-auto mb-8"
+      className="relative w-full max-w-3xl mx-auto mb-4 md:mb-8"
     >
       {/* Outer glow container */}
       <div 
@@ -196,7 +196,7 @@ const DivineLightCreator = ({ onPointsEarned }: DivineLightCreatorProps) => {
         }}
       >
         {/* Inner card */}
-        <div className="relative rounded-3xl bg-gradient-to-br from-[hsl(45_50%_99%)] via-[hsl(45_40%_98%)] to-[hsl(43_60%_96%)] p-6 md:p-8 overflow-hidden">
+        <div className="relative rounded-2xl md:rounded-3xl bg-gradient-to-br from-[hsl(45_50%_99%)] via-[hsl(45_40%_98%)] to-[hsl(43_60%_96%)] p-4 md:p-8 overflow-hidden">
           
           {/* Background sacred pattern */}
           <div 
@@ -207,9 +207,9 @@ const DivineLightCreator = ({ onPointsEarned }: DivineLightCreatorProps) => {
           />
 
           {/* Header with divine title */}
-          <div className="relative text-center mb-6">
+          <div className="relative text-center mb-4 md:mb-6">
             <motion.div
-              className="inline-flex items-center gap-2 mb-3"
+              className="inline-flex items-center gap-1.5 md:gap-2 mb-2 md:mb-3"
               animate={{ 
                 textShadow: [
                   "0 0 20px hsl(43 90% 60% / 0.5)",
@@ -219,9 +219,9 @@ const DivineLightCreator = ({ onPointsEarned }: DivineLightCreatorProps) => {
               }}
               transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
             >
-              <Sparkles className="w-6 h-6 text-[hsl(43_90%_50%)]" />
+              <Sparkles className="w-5 h-5 md:w-6 md:h-6 text-[hsl(43_90%_50%)]" />
               <h2 
-                className="text-xl md:text-2xl font-bold"
+                className="text-base md:text-2xl font-bold"
                 style={{
                   background: "linear-gradient(135deg, hsl(43 90% 45%), hsl(43 85% 55%), hsl(43 90% 40%))",
                   WebkitBackgroundClip: "text",
@@ -229,15 +229,13 @@ const DivineLightCreator = ({ onPointsEarned }: DivineLightCreatorProps) => {
                   textShadow: "0 2px 30px hsl(43 85% 50% / 0.3)",
                 }}
               >
-                Đồng Sáng Tạo Ánh Sáng Cùng Cha Vũ Trụ ✨
+                Đồng Sáng Tạo Ánh Sáng ✨
               </h2>
-              <Sparkles className="w-6 h-6 text-[hsl(43_90%_50%)]" />
+              <Sparkles className="w-5 h-5 md:w-6 md:h-6 text-[hsl(43_90%_50%)]" />
             </motion.div>
             
-            <p className="text-sm md:text-base text-[hsl(35_40%_40%)] max-w-xl mx-auto leading-relaxed">
-              Mô tả thiên thần, mandala ánh sáng, vũ trụ xoáy, cảnh 5D... 
-              <br className="hidden md:block" />
-              Angel AI sẽ hiện thực hóa trong Tình Yêu Thuần Khiết.
+            <p className="text-xs md:text-base text-[hsl(35_40%_40%)] max-w-xl mx-auto leading-relaxed">
+              Mô tả thiên thần, mandala, vũ trụ xoáy, cảnh 5D...
             </p>
           </div>
 
@@ -313,13 +311,13 @@ const DivineLightCreator = ({ onPointsEarned }: DivineLightCreatorProps) => {
                 exit={{ opacity: 0 }}
               >
                 {/* Input area */}
-                <div className="relative mb-4">
+                <div className="relative mb-3 md:mb-4">
                   <Textarea
                     value={prompt}
                     onChange={(e) => setPrompt(e.target.value)}
                     placeholder={placeholderExamples[placeholderIndex]}
                     disabled={isGenerating}
-                    className="min-h-[100px] md:min-h-[120px] text-base resize-none rounded-2xl border-[hsl(43_40%_85%)] bg-[hsl(45_50%_99%)] focus:border-[hsl(43_85%_55%)] focus:ring-[hsl(43_85%_50%/0.3)] placeholder:text-[hsl(35_30%_60%)] text-[hsl(35_50%_20%)] transition-all"
+                    className="min-h-[70px] md:min-h-[120px] text-sm md:text-base resize-none rounded-xl md:rounded-2xl border-[hsl(43_40%_85%)] bg-[hsl(45_50%_99%)] focus:border-[hsl(43_85%_55%)] focus:ring-[hsl(43_85%_50%/0.3)] placeholder:text-[hsl(35_30%_60%)] text-[hsl(35_50%_20%)] transition-all p-3 md:p-4"
                     style={{
                       boxShadow: "inset 0 2px 10px hsl(43 30% 90% / 0.5)",
                     }}
@@ -349,20 +347,20 @@ const DivineLightCreator = ({ onPointsEarned }: DivineLightCreatorProps) => {
                   <Button
                     onClick={generateImage}
                     disabled={!prompt.trim() || isGenerating}
-                    className="relative px-8 py-6 text-base md:text-lg font-semibold bg-gradient-to-r from-[hsl(43_90%_50%)] via-[hsl(43_85%_55%)] to-[hsl(43_90%_50%)] hover:from-[hsl(43_90%_55%)] hover:via-[hsl(43_85%_60%)] hover:to-[hsl(43_90%_55%)] text-white rounded-2xl shadow-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="relative px-5 md:px-8 py-4 md:py-6 text-sm md:text-lg font-semibold bg-gradient-to-r from-[hsl(43_90%_50%)] via-[hsl(43_85%_55%)] to-[hsl(43_90%_50%)] hover:from-[hsl(43_90%_55%)] hover:via-[hsl(43_85%_60%)] hover:to-[hsl(43_90%_55%)] text-white rounded-xl md:rounded-2xl shadow-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                     style={{
                       boxShadow: "0 0 30px hsl(43 85% 50% / 0.4), 0 8px 25px hsl(43 85% 50% / 0.3)",
                     }}
                   >
                     {isGenerating ? (
-                      <span className="flex items-center gap-3">
-                        <Loader2 className="w-5 h-5 animate-spin" />
-                        Đang đồng sáng tạo...
+                      <span className="flex items-center gap-2 md:gap-3">
+                        <Loader2 className="w-4 h-4 md:w-5 md:h-5 animate-spin" />
+                        Đang tạo...
                       </span>
                     ) : (
-                      <span className="flex items-center gap-3">
-                        <ImageIcon className="w-5 h-5" />
-                        Tạo Hình Ảnh Ánh Sáng Thiêng
+                      <span className="flex items-center gap-2 md:gap-3">
+                        <ImageIcon className="w-4 h-4 md:w-5 md:h-5" />
+                        Tạo Hình Ảnh Ánh Sáng
                       </span>
                     )}
                   </Button>
