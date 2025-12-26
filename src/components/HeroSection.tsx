@@ -328,28 +328,34 @@ const HeroSection = ({ onCtaClick }: HeroSectionProps) => {
           </motion.div>
         </div>
 
-        {/* Scroll indicator */}
+      </motion.div>
+
+      {/* Scroll indicator - positioned outside container for visibility */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 2 }}
+        className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20"
+      >
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 2 }}
-          className="absolute bottom-8 left-1/2 -translate-x-1/2"
-          style={{ opacity }}
+          animate={{ y: [0, 10, 0] }}
+          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+          className="flex flex-col items-center gap-2"
         >
-          <motion.div
-            animate={{ y: [0, 10, 0] }}
-            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-            className="flex flex-col items-center gap-2"
+          <span 
+            className="text-sm font-elegant tracking-[0.25em] font-semibold"
+            style={{ color: "hsl(43 60% 40%)" }}
           >
-            <span className="text-xs text-gold-dark/60 font-elegant tracking-[0.25em]">KHÁM PHÁ</span>
-            <div className="w-5 h-8 rounded-full border-2 border-gold/30 flex items-start justify-center p-1">
-              <motion.div
-                animate={{ y: [0, 10, 0] }}
-                transition={{ duration: 1.5, repeat: Infinity }}
-                className="w-1.5 h-1.5 rounded-full bg-gold"
-              />
-            </div>
-          </motion.div>
+            KHÁM PHÁ
+          </span>
+          <div className="w-6 h-10 rounded-full border-2 border-gold/50 flex items-start justify-center p-1.5 bg-white/30 backdrop-blur-sm">
+            <motion.div
+              animate={{ y: [0, 12, 0] }}
+              transition={{ duration: 1.5, repeat: Infinity }}
+              className="w-2 h-2 rounded-full bg-gold"
+              style={{ boxShadow: "0 0 8px hsl(43 80% 50% / 0.6)" }}
+            />
+          </div>
         </motion.div>
       </motion.div>
     </section>
