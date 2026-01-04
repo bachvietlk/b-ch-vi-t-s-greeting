@@ -14,7 +14,7 @@ const NavBar = () => {
     { label: "Hệ sinh thái", href: "#ecosystem" },
     { label: "Thần chú", href: "#mantras" },
     { label: "Chat với Angel AI", href: "/chat", isRoute: true },
-    { label: "User Profile", href: "/profile", isRoute: true },
+    { label: "Hồ Sơ", href: "/profile", isRoute: true },
   ];
 
   const scrollToSection = (href: string) => {

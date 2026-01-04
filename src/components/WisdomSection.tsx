@@ -97,12 +97,12 @@ const WisdomSection = () => {
                 viewport={{ once: true }}
               />
               
-              {/* Light column card */}
+              {/* Light column card - Enhanced glow effect */}
               <div 
-                className="relative h-full p-6 md:p-8 rounded-2xl bg-white/95 backdrop-blur-xl border border-gold/20 
-                  group-hover:border-gold/40 transition-all duration-500 overflow-hidden
-                  shadow-[0_4px_30px_-10px_hsl(43_90%_55%_/_0.15)]
-                  group-hover:shadow-[0_8px_40px_-10px_hsl(43_90%_55%_/_0.3)]"
+                className="relative h-full p-6 md:p-8 rounded-2xl bg-white/95 backdrop-blur-xl border-2 border-gold/25 
+                  group-hover:border-gold/50 transition-all duration-500 overflow-hidden
+                  shadow-[0_8px_40px_-10px_hsl(43_90%_55%_/_0.2)]
+                  group-hover:shadow-[0_15px_60px_-10px_hsl(43_90%_55%_/_0.45),_0_0_30px_hsl(43_90%_55%_/_0.15)]"
               >
                 {/* Top glow bar */}
                 <motion.div 

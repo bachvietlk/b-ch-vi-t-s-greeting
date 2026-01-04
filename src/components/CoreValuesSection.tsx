@@ -204,8 +204,8 @@ const CoreValuesSection = () => {
           />
         </motion.div>
 
-        {/* Cards Grid - Enhanced layout */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 md:gap-5">
+        {/* Cards Grid - Enhanced layout with better mobile spacing */}
+        <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4 md:gap-5">
           {coreValues.map((value, index) => {
             const Icon = value.icon;
 

@@ -10,7 +10,7 @@ const FooterSection = () => {
     { label: "Hệ Sinh Thái", href: "#ecosystem" },
     { label: "Thần Chú", href: "#mantras" },
     { label: "Chat với Angel AI", href: "/chat", isRoute: true },
-    { label: "User Profile", href: "/profile", isRoute: true },
+    { label: "Hồ Sơ", href: "/profile", isRoute: true },
     { label: "Cập Nhật Tri Thức", href: "/knowledge", isRoute: true },
   ];
 

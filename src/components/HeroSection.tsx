@@ -26,7 +26,7 @@ const HeroSection = ({ onCtaClick }: HeroSectionProps) => {
           muted
           playsInline
           onLoadedData={() => setVideoLoaded(true)}
-          className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${videoLoaded ? 'opacity-30' : 'opacity-0'}`}
+          className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${videoLoaded ? 'opacity-25' : 'opacity-0'}`}
         >
           <source src={divineLightVideo} type="video/mp4" />
         </video>
@@ -37,11 +37,11 @@ const HeroSection = ({ onCtaClick }: HeroSectionProps) => {
         />
       </div>
       
-      {/* Radiant gradient overlay */}
+      {/* Enhanced radiant gradient overlay */}
       <div 
         className="absolute inset-0 z-[1]"
         style={{
-          background: "radial-gradient(ellipse at 50% 40%, hsl(43 80% 95% / 0.7) 0%, transparent 60%)"
+          background: "radial-gradient(ellipse at 50% 35%, hsl(45 85% 97% / 0.85) 0%, hsl(43 70% 95% / 0.6) 30%, transparent 65%)"
         }}
       />
 
@@ -173,48 +173,55 @@ const HeroSection = ({ onCtaClick }: HeroSectionProps) => {
             transition={{ duration: 1, delay: 0.4 }}
             className="relative mb-5"
           >
-            {/* Background glow for title */}
-            <div className="absolute inset-0 blur-2xl bg-gold/20 -z-10" />
+            {/* Enhanced background glow for title */}
+            <div 
+              className="absolute inset-0 -z-10" 
+              style={{
+                background: "radial-gradient(ellipse at center, hsl(43 90% 60% / 0.35) 0%, hsl(43 80% 55% / 0.15) 40%, transparent 70%)",
+                filter: "blur(30px)",
+                transform: "scale(1.5)"
+              }}
+            />
             
             <h1 
-              className="font-display text-5xl md:text-7xl lg:text-8xl font-black tracking-wider"
+              className="font-display text-6xl md:text-8xl lg:text-9xl font-black tracking-wider"
               style={{
-                background: "linear-gradient(135deg, hsl(43 90% 45%) 0%, hsl(43 85% 55%) 50%, hsl(40 80% 50%) 100%)",
+                background: "linear-gradient(135deg, hsl(35 95% 35%) 0%, hsl(43 95% 50%) 30%, hsl(48 100% 60%) 50%, hsl(43 95% 50%) 70%, hsl(35 95% 35%) 100%)",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
                 backgroundClip: "text",
-                filter: "drop-shadow(0 2px 4px hsl(43 80% 30% / 0.3))",
+                filter: "drop-shadow(0 4px 8px hsl(35 80% 25% / 0.5)) drop-shadow(0 0 40px hsl(43 90% 55% / 0.4))",
                 textShadow: "none"
               }}
             >
               ANGEL AI
             </h1>
             
-            {/* Golden underline with animation */}
+            {/* Enhanced golden underline with animation */}
             <motion.div 
-              className="absolute -bottom-2 left-1/2 -translate-x-1/2 h-1 bg-gradient-to-r from-transparent via-gold to-transparent rounded-full"
+              className="absolute -bottom-3 left-1/2 -translate-x-1/2 h-1.5 bg-gradient-to-r from-transparent via-gold to-transparent rounded-full"
               initial={{ width: 0, opacity: 0 }}
-              animate={{ width: "70%", opacity: 1 }}
+              animate={{ width: "80%", opacity: 1 }}
               transition={{ duration: 1.2, delay: 1 }}
               style={{
-                boxShadow: "0 0 15px hsl(43 90% 55% / 0.7)"
+                boxShadow: "0 0 20px hsl(43 90% 55% / 0.8), 0 0 40px hsl(43 90% 55% / 0.4)"
               }}
             />
             
-            {/* Decorative stars */}
+            {/* Enhanced decorative stars */}
             <motion.div
-              className="absolute -top-3 -left-6"
-              animate={{ rotate: 360, scale: [1, 1.15, 1] }}
-              transition={{ duration: 10, repeat: Infinity }}
+              className="absolute -top-4 -left-8"
+              animate={{ rotate: 360, scale: [1, 1.3, 1] }}
+              transition={{ duration: 8, repeat: Infinity }}
             >
-              <Star className="w-5 h-5 text-gold fill-gold/40" />
+              <Star className="w-6 h-6 text-gold fill-gold/50" style={{ filter: "drop-shadow(0 0 8px hsl(43 90% 55% / 0.6))" }} />
             </motion.div>
             <motion.div
-              className="absolute -top-3 -right-6"
-              animate={{ rotate: -360, scale: [1, 1.15, 1] }}
-              transition={{ duration: 10, repeat: Infinity, delay: 0.3 }}
+              className="absolute -top-4 -right-8"
+              animate={{ rotate: -360, scale: [1, 1.3, 1] }}
+              transition={{ duration: 8, repeat: Infinity, delay: 0.3 }}
             >
-              <Star className="w-5 h-5 text-gold fill-gold/40" />
+              <Star className="w-6 h-6 text-gold fill-gold/50" style={{ filter: "drop-shadow(0 0 8px hsl(43 90% 55% / 0.6))" }} />
             </motion.div>
           </motion.div>
 
