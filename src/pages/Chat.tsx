@@ -33,9 +33,11 @@ import {
   Image,
   Video,
   MessageCircle,
+  Mic,
 } from "lucide-react";
 
 import ChatAttachButton, { AttachedFilesPreview, AttachedFile } from "@/components/ChatAttachButton";
+import VoiceChat from "@/components/VoiceChat";
 import angelHero from "@/assets/angel-hero.png";
 
 interface DivinMantra {
@@ -109,6 +111,7 @@ const Chat = () => {
   const [historySidebarOpen, setHistorySidebarOpen] = useState(false);
   const [mantras, setMantras] = useState<DivinMantra[]>([]);
   const [attachedFiles, setAttachedFiles] = useState<AttachedFile[]>([]);
+  const [voiceChatOpen, setVoiceChatOpen] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const chatContainerRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
@@ -392,6 +395,25 @@ const Chat = () => {
                     <div className="text-left">
                       <p className="font-medium text-sm">Tạo Ảnh AI</p>
                       <p className="text-[10px] opacity-80">Tạo hình ảnh từ mô tả</p>
+                    </div>
+                  </motion.button>
+
+                  {/* Voice Chat */}
+                  <motion.button
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={() => {
+                      setSidebarOpen(false);
+                      setVoiceChatOpen(true);
+                    }}
+                    className="w-full flex items-center gap-3 p-3 rounded-xl bg-gradient-to-r from-[hsl(160_70%_45%)] to-[hsl(160_70%_35%)] text-white hover:from-[hsl(160_70%_40%)] hover:to-[hsl(160_70%_30%)] transition-all shadow-lg"
+                  >
+                    <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
+                      <Mic className="w-4 h-4" />
+                    </div>
+                    <div className="text-left">
+                      <p className="font-medium text-sm">Voice Chat</p>
+                      <p className="text-[10px] opacity-80">Nói chuyện bằng giọng nói</p>
                     </div>
                   </motion.button>
 
@@ -837,6 +859,22 @@ const Chat = () => {
                 />
               </div>
 
+              {/* Voice Chat button */}
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <Button
+                  type="button"
+                  size="icon"
+                  onClick={() => setVoiceChatOpen(true)}
+                  className="h-14 w-14 rounded-full bg-gradient-to-br from-[hsl(160_70%_45%)] to-[hsl(160_70%_35%)] hover:from-[hsl(160_70%_40%)] hover:to-[hsl(160_70%_30%)] text-white shadow-xl transition-all duration-200"
+                  title="Trò chuyện bằng giọng nói"
+                >
+                  <Mic className="w-6 h-6" />
+                </Button>
+              </motion.div>
+
               {/* Send button with halo pulse */}
               <motion.div
                 animate={input.trim() || attachedFiles.length > 0 ? {
@@ -871,6 +909,19 @@ const Chat = () => {
           </form>
         </div>
       </div>
+
+      {/* Voice Chat Modal */}
+      <AnimatePresence>
+        {voiceChatOpen && (
+          <VoiceChat
+            onClose={() => setVoiceChatOpen(false)}
+            onTranscript={(text, isUser) => {
+              // Add transcript to messages if needed
+              console.log("Voice transcript:", text, isUser);
+            }}
+          />
+        )}
+      </AnimatePresence>
     </>
   );
 };
