@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Sparkles, User, LogIn } from "lucide-react";
+import { Menu, X, Sparkles, User, LogIn, BookHeart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const NavBar = () => {
@@ -14,6 +14,7 @@ const NavBar = () => {
     { label: "Hệ sinh thái", href: "#ecosystem" },
     { label: "Thần chú", href: "#mantras" },
     { label: "Chat với Angel AI", href: "/chat", isRoute: true },
+    { label: "Nhật Ký Tâm Linh", href: "/journal", isRoute: true },
     { label: "Hồ Sơ", href: "/profile", isRoute: true },
   ];
 
