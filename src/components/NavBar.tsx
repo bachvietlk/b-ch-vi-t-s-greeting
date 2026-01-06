@@ -162,6 +162,8 @@ const NavBar = () => {
             {/* Language Switcher */}
             <LanguageSwitcher />
             
+            {/* Notification Bell - Placeholder for logged in users */}
+            
             {/* Login Button - Enhanced glow */}
             <motion.div
               animate={{ 

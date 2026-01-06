@@ -35,6 +35,7 @@ const translations: Record<Language, Translations> = {
     "common.share": "Chia sẻ",
     "common.download": "Tải về",
     "common.search": "Tìm kiếm",
+    "common.continue": "Tiếp tục",
     
     // Leaderboard
     "leaderboard.title": "Bảng Xếp Hạng Ánh Sáng",
@@ -72,6 +73,14 @@ const translations: Record<Language, Translations> = {
     "profile.title": "Hồ Sơ Cá Nhân",
     "profile.displayName": "Tên hiển thị",
     "profile.lightScore": "Điểm Ánh Sáng",
+    "profile.followers": "người theo dõi",
+    "profile.following": "đang theo dõi",
+    "profile.anonymous": "Ẩn danh",
+    "profile.notFound": "Không tìm thấy người dùng",
+    "profile.creations": "Sáng tạo",
+    "profile.achievements": "Thành tích",
+    "profile.noCreations": "Chưa có sáng tạo nào",
+    "profile.noAchievements": "Chưa đạt được thành tích nào",
     
     // Light Score Levels
     "level.1": "Hạt Giống Ánh Sáng",
@@ -97,6 +106,36 @@ const translations: Record<Language, Translations> = {
     "creator.generateVideo": "Tạo Video Ánh Sáng",
     "creator.downloadLight": "Tải về Ánh Sáng",
     "creator.shareInFun": "Chia sẻ trong FUN",
+    
+    // Achievements
+    "achievements.all": "Tất cả",
+    "achievements.lightScore": "Điểm",
+    "achievements.journal": "Nhật ký",
+    "achievements.gallery": "Thư viện",
+    "achievements.chat": "Chat",
+    "achievements.likes": "Lượt thích",
+    "achievements.streak": "Streak",
+    "achievements.progress": "Tiến độ",
+    "achievements.unlocked": "🎉 Mở khóa thành tích!",
+    "achievements.bonusPoints": "điểm thưởng",
+    
+    // Challenges
+    "challenges.daily": "Thử thách hôm nay",
+    "challenges.completed": "Hoàn thành",
+    "challenges.points": "điểm",
+    
+    // Streak
+    "streak.days": "ngày",
+    "streak.best": "Kỷ lục",
+    
+    // Notifications
+    "notifications.title": "Thông báo",
+    "notifications.markAllRead": "Đọc tất cả",
+    "notifications.empty": "Không có thông báo mới",
+    
+    // Follow
+    "follow.follow": "Theo dõi",
+    "follow.unfollow": "Bỏ theo dõi",
   },
   en: {
     // Nav
@@ -120,6 +159,7 @@ const translations: Record<Language, Translations> = {
     "common.share": "Share",
     "common.download": "Download",
     "common.search": "Search",
+    "common.continue": "Continue",
     
     // Leaderboard
     "leaderboard.title": "Light Score Leaderboard",
@@ -157,6 +197,14 @@ const translations: Record<Language, Translations> = {
     "profile.title": "Personal Profile",
     "profile.displayName": "Display name",
     "profile.lightScore": "Light Score",
+    "profile.followers": "followers",
+    "profile.following": "following",
+    "profile.anonymous": "Anonymous",
+    "profile.notFound": "User not found",
+    "profile.creations": "Creations",
+    "profile.achievements": "Achievements",
+    "profile.noCreations": "No creations yet",
+    "profile.noAchievements": "No achievements earned yet",
     
     // Light Score Levels
     "level.1": "Light Seed",
@@ -182,6 +230,36 @@ const translations: Record<Language, Translations> = {
     "creator.generateVideo": "Generate Light Video",
     "creator.downloadLight": "Download Light",
     "creator.shareInFun": "Share in FUN",
+    
+    // Achievements
+    "achievements.all": "All",
+    "achievements.lightScore": "Score",
+    "achievements.journal": "Journal",
+    "achievements.gallery": "Gallery",
+    "achievements.chat": "Chat",
+    "achievements.likes": "Likes",
+    "achievements.streak": "Streak",
+    "achievements.progress": "Progress",
+    "achievements.unlocked": "🎉 Achievement Unlocked!",
+    "achievements.bonusPoints": "bonus points",
+    
+    // Challenges
+    "challenges.daily": "Daily Challenge",
+    "challenges.completed": "Completed",
+    "challenges.points": "points",
+    
+    // Streak
+    "streak.days": "days",
+    "streak.best": "Best",
+    
+    // Notifications
+    "notifications.title": "Notifications",
+    "notifications.markAllRead": "Mark all read",
+    "notifications.empty": "No new notifications",
+    
+    // Follow
+    "follow.follow": "Follow",
+    "follow.unfollow": "Unfollow",
   },
 };
 

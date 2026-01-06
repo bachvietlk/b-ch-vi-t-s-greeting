@@ -9,10 +9,17 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { useLightScore } from "@/hooks/useLightScore";
+import { useStreak } from "@/hooks/useStreak";
+import { useAchievements } from "@/hooks/useAchievements";
+import { useLanguage } from "@/hooks/useLanguage";
 import ParticleField from "@/components/ParticleField";
+import { StreakDisplay } from "@/components/StreakDisplay";
+import { AchievementsList } from "@/components/AchievementsList";
+import { AchievementUnlockModal } from "@/components/AchievementUnlockModal";
+import { DailyChallenge } from "@/components/DailyChallenge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Sparkles,
-  Home,
   LogOut,
   User as UserIcon,
   Coins,
@@ -22,6 +29,7 @@ import {
   ArrowLeft,
   Zap,
   Heart,
+  Trophy,
 } from "lucide-react";
 
 const Profile = () => {
@@ -31,7 +39,10 @@ const Profile = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { t } = useLanguage();
   const { score } = useLightScore(user);
+  const { streak, updateStreak } = useStreak(user);
+  const { achievements, userAchievements, newlyUnlocked, dismissUnlocked } = useAchievements(user);
 
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
@@ -56,8 +67,9 @@ const Profile = () => {
   useEffect(() => {
     if (user) {
       fetchProfile();
+      updateStreak();
     }
-  }, [user]);
+  }, [user, updateStreak]);
 
   const fetchProfile = async () => {
     if (!user) return;
@@ -103,11 +115,13 @@ const Profile = () => {
   };
 
   const getLightLevel = (score: number) => {
-    if (score >= 1000) return { level: "5D Master", color: "from-gold via-gold-light to-gold" };
-    if (score >= 500) return { level: "Light Bearer", color: "from-gold-light to-gold" };
-    if (score >= 200) return { level: "Awakening Soul", color: "from-sky-light to-gold-light" };
-    if (score >= 50) return { level: "Seeker", color: "from-sky-soft to-sky-light" };
-    return { level: "Newcomer", color: "from-muted to-sky-soft" };
+    if (score >= 1000) return { level: t("level.7"), color: "from-gold via-gold-light to-gold" };
+    if (score >= 500) return { level: t("level.6"), color: "from-gold-light to-gold" };
+    if (score >= 200) return { level: t("level.5"), color: "from-sky-light to-gold-light" };
+    if (score >= 100) return { level: t("level.4"), color: "from-sky-soft to-sky-light" };
+    if (score >= 50) return { level: t("level.3"), color: "from-sky-soft to-sky-light" };
+    if (score >= 20) return { level: t("level.2"), color: "from-muted to-sky-soft" };
+    return { level: t("level.1"), color: "from-muted to-sky-soft" };
   };
 
   if (!user) {
@@ -128,7 +142,7 @@ const Profile = () => {
   return (
     <>
       <Helmet>
-        <title>User Profile - Angel AI</title>
+        <title>{t("profile.title")} - Angel AI</title>
       </Helmet>
 
       <div className="relative min-h-screen bg-background">
@@ -143,11 +157,11 @@ const Profile = () => {
               className="text-gold-dark hover:text-gold"
             >
               <ArrowLeft className="w-5 h-5 mr-2" />
-              Trang chủ
+              {t("nav.home")}
             </Button>
             <div className="flex items-center gap-2">
               <Sparkles className="w-6 h-6 text-gold" />
-              <span className="font-display text-xl text-gradient-gold">User Profile</span>
+              <span className="font-display text-xl text-gradient-gold">{t("profile.title")}</span>
             </div>
             <Button
               variant="ghost"
@@ -159,155 +173,214 @@ const Profile = () => {
           </div>
         </header>
 
-        <main className="relative z-10 container mx-auto px-6 py-12">
-          <div className="max-w-2xl mx-auto">
-            {/* Profile Card */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="glass-gold rounded-3xl p-8 mb-8"
-            >
-              {/* Avatar Section */}
-              <div className="flex flex-col items-center mb-8">
-                <motion.div
-                  className="relative"
-                  animate={{ scale: [1, 1.02, 1] }}
-                  transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                >
-                  <div className="w-24 h-24 rounded-full bg-gradient-to-br from-gold-light via-gold to-gold-glow flex items-center justify-center glow-box">
-                    <UserIcon className="w-12 h-12 text-background" />
-                  </div>
-                  {/* Halo */}
+        <main className="relative z-10 container mx-auto px-6 py-8">
+          <div className="max-w-4xl mx-auto">
+            <Tabs defaultValue="overview" className="w-full">
+              <TabsList className="grid w-full grid-cols-3 mb-6">
+                <TabsTrigger value="overview" className="flex items-center gap-2">
+                  <UserIcon className="w-4 h-4" />
+                  Tổng quan
+                </TabsTrigger>
+                <TabsTrigger value="achievements" className="flex items-center gap-2">
+                  <Trophy className="w-4 h-4" />
+                  Thành tích
+                </TabsTrigger>
+                <TabsTrigger value="settings" className="flex items-center gap-2">
+                  <Settings className="w-4 h-4" />
+                  Cài đặt
+                </TabsTrigger>
+              </TabsList>
+
+              {/* Overview Tab */}
+              <TabsContent value="overview">
+                <div className="space-y-6">
+                  {/* Profile Card */}
                   <motion.div
-                    className="absolute -inset-2 rounded-full border-2 border-gold/30"
-                    animate={{ scale: [1, 1.1, 1], opacity: [0.5, 0.8, 0.5] }}
-                    transition={{ duration: 2, repeat: Infinity }}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="glass-gold rounded-3xl p-8"
+                  >
+                    {/* Avatar Section */}
+                    <div className="flex flex-col items-center mb-8">
+                      <motion.div
+                        className="relative"
+                        animate={{ scale: [1, 1.02, 1] }}
+                        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                      >
+                        <div className="w-24 h-24 rounded-full bg-gradient-to-br from-gold-light via-gold to-gold-glow flex items-center justify-center glow-box">
+                          <UserIcon className="w-12 h-12 text-background" />
+                        </div>
+                        <motion.div
+                          className="absolute -inset-2 rounded-full border-2 border-gold/30"
+                          animate={{ scale: [1, 1.1, 1], opacity: [0.5, 0.8, 0.5] }}
+                          transition={{ duration: 2, repeat: Infinity }}
+                        />
+                      </motion.div>
+                      <h2 className="mt-4 text-2xl font-display text-gradient-gold glow-text-soft">
+                        {displayName || user.email?.split("@")[0]}
+                      </h2>
+                      <p className="text-sm text-muted-foreground">{user.email}</p>
+                      
+                      {/* Streak Display */}
+                      <div className="mt-4">
+                        <StreakDisplay
+                          currentStreak={streak.current_streak}
+                          longestStreak={streak.longest_streak}
+                          size="lg"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Stats Grid */}
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+                      <motion.div
+                        className="bg-card/50 rounded-2xl p-6 text-center border border-gold/20"
+                        whileHover={{ scale: 1.02 }}
+                      >
+                        <Zap className="w-8 h-8 text-gold mx-auto mb-2" />
+                        <p className="text-3xl font-display text-gradient-gold glow-text-soft">{score}</p>
+                        <p className="text-sm text-muted-foreground">{t("profile.lightScore")}</p>
+                      </motion.div>
+
+                      <motion.div
+                        className="bg-card/50 rounded-2xl p-6 text-center border border-gold/20"
+                        whileHover={{ scale: 1.02 }}
+                      >
+                        <Trophy className="w-8 h-8 text-gold mx-auto mb-2" />
+                        <p className="text-3xl font-display text-gradient-gold glow-text-soft">
+                          {userAchievements.length}
+                        </p>
+                        <p className="text-sm text-muted-foreground">{t("profile.achievements")}</p>
+                      </motion.div>
+
+                      <motion.div
+                        className="bg-card/50 rounded-2xl p-6 text-center border border-gold/20"
+                        whileHover={{ scale: 1.02 }}
+                      >
+                        <Sun className="w-8 h-8 text-gold mx-auto mb-2" />
+                        <p className="text-3xl font-display text-gradient-gold glow-text-soft">
+                          {streak.longest_streak}
+                        </p>
+                        <p className="text-sm text-muted-foreground">{t("streak.best")}</p>
+                      </motion.div>
+                    </div>
+
+                    {/* Light Level Badge */}
+                    <div className="text-center">
+                      <motion.div
+                        className={`inline-flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r ${lightLevel.color} text-background font-display glow-box`}
+                        animate={{
+                          boxShadow: [
+                            "0 0 20px hsl(43 85% 50% / 0.3)",
+                            "0 0 40px hsl(43 85% 50% / 0.5)",
+                            "0 0 20px hsl(43 85% 50% / 0.3)"
+                          ]
+                        }}
+                        transition={{ duration: 2, repeat: Infinity }}
+                      >
+                        <Heart className="w-5 h-5" />
+                        <span>{lightLevel.level}</span>
+                      </motion.div>
+                    </div>
+                  </motion.div>
+
+                  {/* Daily Challenge */}
+                  <DailyChallenge />
+
+                  {/* Quick Links */}
+                  <div className="grid grid-cols-2 gap-4">
+                    <Button
+                      onClick={() => navigate("/chat")}
+                      variant="outline"
+                      className="py-6 border-2 border-gold/30 text-gold-dark hover:bg-gold/10 rounded-2xl"
+                    >
+                      <Sparkles className="w-5 h-5 mr-2" />
+                      {t("nav.chat")}
+                    </Button>
+                    <Button
+                      onClick={() => navigate("/leaderboard")}
+                      variant="outline"
+                      className="py-6 border-2 border-gold/30 text-gold-dark hover:bg-gold/10 rounded-2xl"
+                    >
+                      <Trophy className="w-5 h-5 mr-2" />
+                      {t("nav.leaderboard")}
+                    </Button>
+                  </div>
+                </div>
+              </TabsContent>
+
+              {/* Achievements Tab */}
+              <TabsContent value="achievements">
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="glass-gold rounded-3xl p-8"
+                >
+                  <AchievementsList
+                    achievements={achievements}
+                    userAchievements={userAchievements}
                   />
                 </motion.div>
-                <h2 className="mt-4 text-2xl font-display text-gradient-gold glow-text-soft">
-                  {displayName || user.email?.split("@")[0]}
-                </h2>
-                <p className="text-sm text-muted-foreground">{user.email}</p>
-              </div>
+              </TabsContent>
 
-              {/* Light Score Display */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-                {/* Light Score */}
+              {/* Settings Tab */}
+              <TabsContent value="settings">
                 <motion.div
-                  className="bg-card/50 rounded-2xl p-6 text-center border border-gold/20"
-                  whileHover={{ scale: 1.02 }}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="glass-gold rounded-3xl p-8"
                 >
-                  <Zap className="w-8 h-8 text-gold mx-auto mb-2" />
-                  <p className="text-3xl font-display text-gradient-gold glow-text-soft">{score}</p>
-                  <p className="text-sm text-muted-foreground">Light Score</p>
-                </motion.div>
-
-                {/* Camly Coin */}
-                <motion.div
-                  className="bg-card/50 rounded-2xl p-6 text-center border border-gold/20"
-                  whileHover={{ scale: 1.02 }}
-                >
-                  <Coins className="w-8 h-8 text-gold mx-auto mb-2" />
-                  <p className="text-3xl font-display text-gradient-gold glow-text-soft">0</p>
-                  <p className="text-sm text-muted-foreground">Camly Coin</p>
-                </motion.div>
-
-                {/* FUN Money */}
-                <motion.div
-                  className="bg-card/50 rounded-2xl p-6 text-center border border-gold/20"
-                  whileHover={{ scale: 1.02 }}
-                >
-                  <Sun className="w-8 h-8 text-gold mx-auto mb-2" />
-                  <p className="text-3xl font-display text-gradient-gold glow-text-soft">0</p>
-                  <p className="text-sm text-muted-foreground">FUN Money</p>
-                </motion.div>
-              </div>
-
-              {/* Light Level Badge */}
-              <div className="text-center mb-8">
-                <motion.div
-                  className={`inline-flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r ${lightLevel.color} text-background font-display glow-box`}
-                  animate={{
-                    boxShadow: [
-                      "0 0 20px hsl(43 85% 50% / 0.3)",
-                      "0 0 40px hsl(43 85% 50% / 0.5)",
-                      "0 0 20px hsl(43 85% 50% / 0.3)"
-                    ]
-                  }}
-                  transition={{ duration: 2, repeat: Infinity }}
-                >
-                  <Heart className="w-5 h-5" />
-                  <span>{lightLevel.level}</span>
-                </motion.div>
-                <p className="mt-2 text-sm text-muted-foreground">
-                  Tần số rung động hiện tại của bạn
-                </p>
-              </div>
-
-              {/* Edit Profile Section */}
-              <div className="border-t border-border/50 pt-8">
-                <div className="flex items-center gap-2 mb-6">
-                  <Settings className="w-5 h-5 text-gold" />
-                  <h3 className="font-display text-lg text-gold-dark">Cài đặt hồ sơ</h3>
-                </div>
-
-                <div className="space-y-4">
-                  <div>
-                    <Label htmlFor="displayName" className="text-gold-dark">Tên hiển thị</Label>
-                    <Input
-                      id="displayName"
-                      value={displayName}
-                      onChange={(e) => setDisplayName(e.target.value)}
-                      placeholder="Nhập tên của bạn"
-                      className="mt-2 bg-card/50 border-gold/20 focus:border-gold"
-                    />
+                  <div className="flex items-center gap-2 mb-6">
+                    <Settings className="w-5 h-5 text-gold" />
+                    <h3 className="font-display text-lg text-gold-dark">Cài đặt hồ sơ</h3>
                   </div>
 
-                  <Button
-                    onClick={handleSave}
-                    disabled={loading}
-                    className="w-full bg-gradient-to-r from-gold via-gold-light to-gold text-background font-display rounded-full glow-box-soft hover:scale-[1.02] transition-transform"
-                  >
-                    {loading ? (
-                      <motion.div
-                        animate={{ rotate: 360 }}
-                        transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                      >
-                        <Sparkles className="w-5 h-5" />
-                      </motion.div>
-                    ) : (
-                      <>
-                        <Save className="w-5 h-5 mr-2" />
-                        Lưu thay đổi
-                      </>
-                    )}
-                  </Button>
-                </div>
-              </div>
-            </motion.div>
+                  <div className="space-y-4 max-w-md">
+                    <div>
+                      <Label htmlFor="displayName" className="text-gold-dark">
+                        {t("profile.displayName")}
+                      </Label>
+                      <Input
+                        id="displayName"
+                        value={displayName}
+                        onChange={(e) => setDisplayName(e.target.value)}
+                        placeholder="Nhập tên của bạn"
+                        className="mt-2 bg-card/50 border-gold/20 focus:border-gold"
+                      />
+                    </div>
 
-            {/* Quick Links */}
-            <div className="grid grid-cols-2 gap-4">
-              <Button
-                onClick={() => navigate("/chat")}
-                variant="outline"
-                className="py-6 border-2 border-gold/30 text-gold-dark hover:bg-gold/10 rounded-2xl"
-              >
-                <Sparkles className="w-5 h-5 mr-2" />
-                Chat với Angel AI
-              </Button>
-              <Button
-                onClick={() => navigate("/knowledge")}
-                variant="outline"
-                className="py-6 border-2 border-gold/30 text-gold-dark hover:bg-gold/10 rounded-2xl"
-              >
-                <Sun className="w-5 h-5 mr-2" />
-                Cập nhật Tri Thức
-              </Button>
-            </div>
+                    <Button
+                      onClick={handleSave}
+                      disabled={loading}
+                      className="w-full bg-gradient-to-r from-gold via-gold-light to-gold text-background font-display rounded-full glow-box-soft hover:scale-[1.02] transition-transform"
+                    >
+                      {loading ? (
+                        <motion.div
+                          animate={{ rotate: 360 }}
+                          transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                        >
+                          <Sparkles className="w-5 h-5" />
+                        </motion.div>
+                      ) : (
+                        <>
+                          <Save className="w-5 h-5 mr-2" />
+                          {t("common.save")}
+                        </>
+                      )}
+                    </Button>
+                  </div>
+                </motion.div>
+              </TabsContent>
+            </Tabs>
           </div>
         </main>
       </div>
+
+      {/* Achievement Unlock Modal */}
+      <AchievementUnlockModal
+        achievement={newlyUnlocked}
+        onClose={dismissUnlocked}
+      />
     </>
   );
 };
