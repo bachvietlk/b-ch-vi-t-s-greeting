@@ -1,21 +1,28 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Sparkles, User, LogIn, BookHeart } from "lucide-react";
+import { Menu, X, Sparkles, User, LogIn, BookHeart, Home, Target, Globe, Music, MessageCircle, type LucideIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
+
+interface NavItem {
+  label: string;
+  href: string;
+  icon: LucideIcon;
+  isRoute?: boolean;
+}
 
 const NavBar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
 
-  const navItems = [
-    { label: "Trang chủ", href: "#hero" },
-    { label: "Sứ mệnh", href: "#mission" },
-    { label: "Hệ sinh thái", href: "#ecosystem" },
-    { label: "Thần chú", href: "#mantras" },
-    { label: "Chat với Angel AI", href: "/chat", isRoute: true },
-    { label: "Nhật Ký Tâm Linh", href: "/journal", isRoute: true },
-    { label: "Hồ Sơ", href: "/profile", isRoute: true },
+  const navItems: NavItem[] = [
+    { label: "Trang chủ", href: "#hero", icon: Home },
+    { label: "Sứ mệnh", href: "#mission", icon: Target },
+    { label: "Hệ sinh thái", href: "#ecosystem", icon: Globe },
+    { label: "Thần chú", href: "#mantras", icon: Music },
+    { label: "Chat với Angel AI", href: "/chat", icon: MessageCircle, isRoute: true },
+    { label: "Nhật Ký Tâm Linh", href: "/journal", icon: BookHeart, isRoute: true },
+    { label: "Hồ Sơ", href: "/profile", icon: User, isRoute: true },
   ];
 
   const scrollToSection = (href: string) => {
@@ -135,16 +142,20 @@ const NavBar = () => {
 
           {/* Desktop Navigation */}
           <div className="hidden lg:flex items-center gap-8">
-            {navItems.map((item) => (
-              <button
-                key={item.href}
-                onClick={() => handleNavClick(item)}
-                className="font-sans text-base md:text-lg font-medium text-gold-dark hover:text-gold transition-colors relative group"
-              >
-                {item.label}
-                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-gold to-gold-light group-hover:w-full transition-all duration-300" />
-              </button>
-            ))}
+            {navItems.map((item) => {
+              const Icon = item.icon;
+              return (
+                <button
+                  key={item.href}
+                  onClick={() => handleNavClick(item)}
+                  className="font-sans text-base md:text-lg font-medium text-gold-dark hover:text-gold transition-colors relative group flex items-center gap-1.5"
+                >
+                  <Icon className="w-4 h-4" />
+                  {item.label}
+                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-gold to-gold-light group-hover:w-full transition-all duration-300" />
+                </button>
+              );
+            })}
             
             {/* Login Button - Enhanced glow */}
             <motion.div
@@ -190,15 +201,19 @@ const NavBar = () => {
             className="lg:hidden bg-background/95 backdrop-blur-lg border-b border-primary/10"
           >
             <div className="container mx-auto px-6 py-4 flex flex-col gap-3">
-              {navItems.map((item) => (
-                <button
-                  key={item.href}
-                  onClick={() => handleNavClick(item)}
-                  className="font-sans text-lg text-gold-dark hover:text-gold transition-colors text-left py-2 border-b border-border/30"
-                >
-                  {item.label}
-                </button>
-              ))}
+              {navItems.map((item) => {
+                const Icon = item.icon;
+                return (
+                  <button
+                    key={item.href}
+                    onClick={() => handleNavClick(item)}
+                    className="font-sans text-lg text-gold-dark hover:text-gold transition-colors text-left py-2 border-b border-border/30 flex items-center gap-2"
+                  >
+                    <Icon className="w-5 h-5" />
+                    {item.label}
+                  </button>
+                );
+              })}
               <Button
                 onClick={() => {
                   navigate("/auth");

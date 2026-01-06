@@ -18,12 +18,21 @@ import {
   BookOpen,
   Feather,
   Calendar,
+  Wand2,
+  Loader2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { JournalEntry, NewJournalEntry } from "@/hooks/useJournal";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
+
+interface JournalSuggestion {
+  title: string;
+  prompt: string;
+}
 
 interface JournalEditorProps {
   isOpen: boolean;
@@ -52,6 +61,32 @@ const JournalEditor = ({ isOpen, onClose, onSave, editingEntry }: JournalEditorP
   const [tags, setTags] = useState<string[]>([]);
   const [tagInput, setTagInput] = useState("");
   const [isSaving, setIsSaving] = useState(false);
+  const [suggestions, setSuggestions] = useState<JournalSuggestion[]>([]);
+  const [isLoadingSuggestions, setIsLoadingSuggestions] = useState(false);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+
+  const fetchSuggestions = async () => {
+    setIsLoadingSuggestions(true);
+    setShowSuggestions(true);
+    try {
+      const { data, error } = await supabase.functions.invoke('journal-suggestions');
+      if (error) throw error;
+      if (data?.suggestions) {
+        setSuggestions(data.suggestions);
+      }
+    } catch (error) {
+      console.error("Error fetching suggestions:", error);
+      toast.error("Không thể tải gợi ý. Vui lòng thử lại.");
+    } finally {
+      setIsLoadingSuggestions(false);
+    }
+  };
+
+  const applySuggestion = (suggestion: JournalSuggestion) => {
+    setTitle(suggestion.title);
+    setContent(suggestion.prompt + "\n\n");
+    setShowSuggestions(false);
+  };
 
   const today = format(new Date(), "EEEE, dd MMMM yyyy", { locale: vi });
 
@@ -182,6 +217,63 @@ const JournalEditor = ({ isOpen, onClose, onSave, editingEntry }: JournalEditorP
 
             {/* Content */}
             <div className="flex-1 overflow-y-auto p-4 space-y-4">
+              {/* AI Suggestions Button */}
+              {!editingEntry && (
+                <div className="space-y-3">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={fetchSuggestions}
+                    disabled={isLoadingSuggestions}
+                    className="w-full bg-gradient-to-r from-purple-50 to-violet-50 border-purple-200 hover:border-purple-300 hover:bg-purple-100 text-purple-700 rounded-xl h-11 flex items-center justify-center gap-2"
+                  >
+                    {isLoadingSuggestions ? (
+                      <>
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                        Đang tạo gợi ý...
+                      </>
+                    ) : (
+                      <>
+                        <Wand2 className="w-4 h-4" />
+                        ✨ Gợi ý từ Angel AI
+                      </>
+                    )}
+                  </Button>
+
+                  {/* Suggestions Grid */}
+                  <AnimatePresence>
+                    {showSuggestions && suggestions.length > 0 && (
+                      <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: "auto" }}
+                        exit={{ opacity: 0, height: 0 }}
+                        className="grid grid-cols-2 gap-2"
+                      >
+                        {suggestions.map((suggestion, index) => (
+                          <motion.button
+                            key={index}
+                            type="button"
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: index * 0.1 }}
+                            onClick={() => applySuggestion(suggestion)}
+                            className="text-left p-3 rounded-xl bg-gradient-to-br from-purple-50 to-violet-50 border border-purple-100 hover:border-purple-300 hover:shadow-md transition-all"
+                          >
+                            <p className="font-medium text-purple-800 text-sm mb-1 flex items-center gap-1.5">
+                              <Sparkles className="w-3.5 h-3.5" />
+                              {suggestion.title}
+                            </p>
+                            <p className="text-xs text-purple-600/80 line-clamp-2">
+                              {suggestion.prompt}
+                            </p>
+                          </motion.button>
+                        ))}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              )}
+
               {/* Title Input - Simplified */}
               <div>
                 <Input
