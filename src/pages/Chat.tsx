@@ -216,7 +216,7 @@ const Chat = () => {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVodW5ldHdnbG56a3dncHljamJ1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjYxMDkzMDIsImV4cCI6MjA4MTY4NTMwMn0.9cBzB6AutqXXliATYDYqTBgrlcQPjSWKajjJR8_3x_I`,
+            Authorization: `Bearer ${session?.access_token}`,
           },
           body: JSON.stringify({ messages: messagesToSend, images }),
         }
