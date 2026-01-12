@@ -17,12 +17,16 @@ import { StreakDisplay } from "@/components/StreakDisplay";
 import { AchievementsList } from "@/components/AchievementsList";
 import { AchievementUnlockModal } from "@/components/AchievementUnlockModal";
 import { DailyChallenge } from "@/components/DailyChallenge";
+import { AvatarUpload } from "@/components/AvatarUpload";
+import { ChangePasswordDialog } from "@/components/ChangePasswordDialog";
+import { DeleteAccountDialog } from "@/components/DeleteAccountDialog";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Separator } from "@/components/ui/separator";
 import {
   Sparkles,
   LogOut,
   User as UserIcon,
-  Coins,
   Sun,
   Settings,
   Save,
@@ -30,12 +34,17 @@ import {
   Zap,
   Heart,
   Trophy,
+  Mail,
+  Globe,
+  Shield,
+  AlertTriangle,
 } from "lucide-react";
 
 const Profile = () => {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [displayName, setDisplayName] = useState("");
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -76,12 +85,13 @@ const Profile = () => {
     
     const { data, error } = await supabase
       .from("profiles")
-      .select("display_name")
+      .select("display_name, avatar_url")
       .eq("user_id", user.id)
       .single();
 
     if (data && !error) {
       setDisplayName(data.display_name || "");
+      setAvatarUrl(data.avatar_url || null);
     }
   };
 
@@ -107,6 +117,25 @@ const Profile = () => {
       });
     }
     setLoading(false);
+  };
+
+  const handleAvatarChange = async (newUrl: string) => {
+    if (!user) return;
+
+    const { error } = await supabase
+      .from("profiles")
+      .update({ avatar_url: newUrl })
+      .eq("user_id", user.id);
+
+    if (error) {
+      toast({
+        title: "Lỗi",
+        description: "Không thể cập nhật avatar",
+        variant: "destructive",
+      });
+    } else {
+      setAvatarUrl(newUrl);
+    }
   };
 
   const handleLogout = async () => {
@@ -207,8 +236,12 @@ const Profile = () => {
                         animate={{ scale: [1, 1.02, 1] }}
                         transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
                       >
-                        <div className="w-24 h-24 rounded-full bg-gradient-to-br from-gold-light via-gold to-gold-glow flex items-center justify-center glow-box">
-                          <UserIcon className="w-12 h-12 text-background" />
+                        <div className="w-24 h-24 rounded-full bg-gradient-to-br from-gold-light via-gold to-gold-glow flex items-center justify-center glow-box overflow-hidden">
+                          {avatarUrl ? (
+                            <img src={avatarUrl} alt="Avatar" className="w-full h-full object-cover" />
+                          ) : (
+                            <UserIcon className="w-12 h-12 text-background" />
+                          )}
                         </div>
                         <motion.div
                           className="absolute -inset-2 rounded-full border-2 border-gold/30"
@@ -328,46 +361,128 @@ const Profile = () => {
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="glass-gold rounded-3xl p-8"
+                  className="space-y-6"
                 >
-                  <div className="flex items-center gap-2 mb-6">
-                    <Settings className="w-5 h-5 text-gold" />
-                    <h3 className="font-display text-lg text-gold-dark">Cài đặt hồ sơ</h3>
-                  </div>
-
-                  <div className="space-y-4 max-w-md">
-                    <div>
-                      <Label htmlFor="displayName" className="text-gold-dark">
-                        {t("profile.displayName")}
-                      </Label>
-                      <Input
-                        id="displayName"
-                        value={displayName}
-                        onChange={(e) => setDisplayName(e.target.value)}
-                        placeholder="Nhập tên của bạn"
-                        className="mt-2 bg-card/50 border-gold/20 focus:border-gold"
-                      />
+                  {/* Profile Settings Section */}
+                  <div className="glass-gold rounded-3xl p-8">
+                    <div className="flex items-center gap-2 mb-6">
+                      <UserIcon className="w-5 h-5 text-gold" />
+                      <h3 className="font-display text-lg text-gold-dark">Hồ sơ cá nhân</h3>
                     </div>
 
-                    <Button
-                      onClick={handleSave}
-                      disabled={loading}
-                      className="w-full bg-gradient-to-r from-gold via-gold-light to-gold text-background font-display rounded-full glow-box-soft hover:scale-[1.02] transition-transform"
-                    >
-                      {loading ? (
-                        <motion.div
-                          animate={{ rotate: 360 }}
-                          transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                        >
-                          <Sparkles className="w-5 h-5" />
-                        </motion.div>
-                      ) : (
-                        <>
-                          <Save className="w-5 h-5 mr-2" />
-                          {t("common.save")}
-                        </>
-                      )}
-                    </Button>
+                    <div className="space-y-6 max-w-md mx-auto">
+                      {/* Avatar Upload */}
+                      <AvatarUpload
+                        currentAvatarUrl={avatarUrl}
+                        onAvatarChange={handleAvatarChange}
+                        size="lg"
+                      />
+
+                      {/* Display Name */}
+                      <div>
+                        <Label htmlFor="displayName" className="text-gold-dark">
+                          {t("profile.displayName")}
+                        </Label>
+                        <Input
+                          id="displayName"
+                          value={displayName}
+                          onChange={(e) => setDisplayName(e.target.value)}
+                          placeholder="Nhập tên của bạn"
+                          className="mt-2 bg-card/50 border-gold/20 focus:border-gold"
+                        />
+                      </div>
+
+                      {/* Email (Read-only) */}
+                      <div>
+                        <Label htmlFor="email" className="text-gold-dark flex items-center gap-2">
+                          <Mail className="w-4 h-4" />
+                          Email
+                        </Label>
+                        <Input
+                          id="email"
+                          value={user.email || ""}
+                          disabled
+                          className="mt-2 bg-card/30 border-gold/10 text-muted-foreground"
+                        />
+                      </div>
+
+                      <Button
+                        onClick={handleSave}
+                        disabled={loading}
+                        className="w-full bg-gradient-to-r from-gold via-gold-light to-gold text-background font-display rounded-full glow-box-soft hover:scale-[1.02] transition-transform"
+                      >
+                        {loading ? (
+                          <motion.div
+                            animate={{ rotate: 360 }}
+                            transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                          >
+                            <Sparkles className="w-5 h-5" />
+                          </motion.div>
+                        ) : (
+                          <>
+                            <Save className="w-5 h-5 mr-2" />
+                            {t("common.save")}
+                          </>
+                        )}
+                      </Button>
+                    </div>
+                  </div>
+
+                  {/* Language Section */}
+                  <div className="glass-gold rounded-3xl p-8">
+                    <div className="flex items-center gap-2 mb-6">
+                      <Globe className="w-5 h-5 text-gold" />
+                      <h3 className="font-display text-lg text-gold-dark">Ngôn ngữ</h3>
+                    </div>
+
+                    <div className="max-w-md">
+                      <p className="text-sm text-muted-foreground mb-4">
+                        Chọn ngôn ngữ hiển thị cho ứng dụng
+                      </p>
+                      <LanguageSwitcher />
+                    </div>
+                  </div>
+
+                  {/* Security Section */}
+                  <div className="glass-gold rounded-3xl p-8">
+                    <div className="flex items-center gap-2 mb-6">
+                      <Shield className="w-5 h-5 text-gold" />
+                      <h3 className="font-display text-lg text-gold-dark">Bảo mật</h3>
+                    </div>
+
+                    <div className="max-w-md space-y-4">
+                      <p className="text-sm text-muted-foreground">
+                        Quản lý bảo mật tài khoản của bạn
+                      </p>
+                      <ChangePasswordDialog />
+                    </div>
+                  </div>
+
+                  {/* Account Section */}
+                  <div className="glass-gold rounded-3xl p-8 border border-destructive/20">
+                    <div className="flex items-center gap-2 mb-6">
+                      <AlertTriangle className="w-5 h-5 text-destructive" />
+                      <h3 className="font-display text-lg text-destructive">Tài khoản</h3>
+                    </div>
+
+                    <div className="max-w-md space-y-4">
+                      <Button
+                        onClick={handleLogout}
+                        variant="outline"
+                        className="w-full border-gold/30 text-gold-dark hover:bg-gold/10"
+                      >
+                        <LogOut className="w-4 h-4 mr-2" />
+                        Đăng xuất
+                      </Button>
+
+                      <Separator className="bg-border/50" />
+
+                      <p className="text-sm text-muted-foreground">
+                        Xoá tài khoản sẽ xoá vĩnh viễn tất cả dữ liệu của bạn. Hành động này không thể hoàn tác.
+                      </p>
+                      
+                      <DeleteAccountDialog userEmail={user.email || ""} />
+                    </div>
                   </div>
                 </motion.div>
               </TabsContent>
