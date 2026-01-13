@@ -674,7 +674,7 @@ const Chat = () => {
           ref={chatContainerRef}
           className="flex-1 overflow-y-auto px-4 md:px-8 py-8 md:py-12"
         >
-          <div className="max-w-4xl mx-auto space-y-8">
+          <div className="max-w-5xl mx-auto space-y-8">
             {/* Welcome message on first load - Grok style centered */}
             {messages.length === 0 && (
               <motion.div
@@ -810,7 +810,7 @@ const Chat = () => {
                   <img
                     src={angelHero}
                     alt="Angel AI"
-                    className="w-12 h-12 md:w-14 md:h-14 rounded-full object-cover border-2 border-[hsl(43_85%_60%/0.4)]"
+                    className="w-14 h-14 md:w-16 md:h-16 rounded-full object-cover border-2 border-[hsl(43_85%_60%/0.4)]"
                   />
                 </motion.div>
                 
@@ -841,7 +841,7 @@ const Chat = () => {
 
         {/* Ultra-clean Input Bar - Grok style with attachment inside */}
         <div className="relative z-10 border-t border-[hsl(43_40%_90%)] bg-[hsl(45_40%_99%/0.95)] backdrop-blur-md px-4 md:px-8 py-4 md:py-5">
-          <form onSubmit={handleSubmit} className="max-w-4xl mx-auto">
+          <form onSubmit={handleSubmit} className="max-w-5xl mx-auto">
             {/* Attached Files Preview - Above input */}
             <AttachedFilesPreview 
               files={attachedFiles} 
