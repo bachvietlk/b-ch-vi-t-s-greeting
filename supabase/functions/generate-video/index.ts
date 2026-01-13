@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { sanitizePrompt } from "../_shared/prompt-sanitizer.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -58,9 +59,15 @@ serve(async (req) => {
       );
     }
 
-    const trimmedPrompt = prompt.trim();
+    // Sanitize prompt for injection attacks
+    const sanitizeResult = sanitizePrompt(prompt);
+    const sanitizedPrompt = sanitizeResult.sanitized;
     
-    if (trimmedPrompt.length === 0) {
+    if (sanitizeResult.isSuspicious) {
+      console.warn("Suspicious prompt detected from user:", userId, "patterns:", sanitizeResult.detectedPatterns);
+    }
+    
+    if (sanitizedPrompt.length === 0) {
       console.log("Empty prompt received");
       return new Response(
         JSON.stringify({ error: "Prompt không được để trống" }),
@@ -68,8 +75,8 @@ serve(async (req) => {
       );
     }
 
-    if (trimmedPrompt.length > MAX_PROMPT_LENGTH) {
-      console.log("Prompt too long:", trimmedPrompt.length);
+    if (sanitizedPrompt.length > MAX_PROMPT_LENGTH) {
+      console.log("Prompt too long:", sanitizedPrompt.length);
       return new Response(
         JSON.stringify({ error: `Prompt quá dài (tối đa ${MAX_PROMPT_LENGTH} ký tự)` }),
         { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
@@ -83,7 +90,7 @@ serve(async (req) => {
     }
 
     // Enhance prompt with divine styling
-    const enhancedPrompt = trimmedPrompt + DIVINE_ENHANCEMENT;
+    const enhancedPrompt = sanitizedPrompt + DIVINE_ENHANCEMENT;
     console.log("Generating video with enhanced prompt, length:", enhancedPrompt.length);
 
     // Generate a divine cinematic image using Gemini image generation

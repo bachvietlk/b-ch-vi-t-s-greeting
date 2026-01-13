@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { sanitizePrompt, validateMessageRole } from "../_shared/prompt-sanitizer.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -195,6 +196,15 @@ serve(async (req) => {
         );
       }
 
+      // Validate message role - only allow 'user' and 'assistant'
+      if (!validateMessageRole(msg.role)) {
+        console.warn("Invalid message role detected:", msg.role, "from user:", userId);
+        return new Response(
+          JSON.stringify({ error: "Vai trò tin nhắn không hợp lệ" }),
+          { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        );
+      }
+
       // Check if this is the last user message and has images
       const isLastUserMessage = i === messages.length - 1 && msg.role === "user";
       const hasImages = isLastUserMessage && images && Array.isArray(images) && images.length > 0;
@@ -213,18 +223,20 @@ serve(async (req) => {
           }
         }
         
-        // Add text
+        // Sanitize text content for prompt injection
+        let textToAdd = "Hãy mô tả và phân tích hình ảnh này với góc nhìn tâm linh và ánh sáng của Cha Vũ Trụ.";
         if (typeof msg.content === "string" && msg.content.trim()) {
-          content.push({
-            type: "text",
-            text: msg.content
-          });
-        } else {
-          content.push({
-            type: "text",
-            text: "Hãy mô tả và phân tích hình ảnh này với góc nhìn tâm linh và ánh sáng của Cha Vũ Trụ."
-          });
+          const sanitizeResult = sanitizePrompt(msg.content);
+          if (sanitizeResult.isSuspicious) {
+            console.warn("Suspicious prompt detected from user:", userId, "patterns:", sanitizeResult.detectedPatterns);
+          }
+          textToAdd = sanitizeResult.sanitized;
         }
+        
+        content.push({
+          type: "text",
+          text: textToAdd
+        });
         
         processedMessages.push({
           role: msg.role,
@@ -242,9 +254,15 @@ serve(async (req) => {
           );
         }
         
+        // Sanitize for prompt injection
+        const sanitizeResult = sanitizePrompt(textContent);
+        if (sanitizeResult.isSuspicious) {
+          console.warn("Suspicious prompt detected from user:", userId, "patterns:", sanitizeResult.detectedPatterns);
+        }
+        
         processedMessages.push({
           role: msg.role,
-          content: textContent
+          content: sanitizeResult.sanitized
         });
       }
     }
