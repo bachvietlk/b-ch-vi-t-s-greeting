@@ -50,9 +50,9 @@ const ChatMessage = ({ role, content, isStreaming }: ChatMessageProps) => {
         className="flex justify-end"
       >
         <div 
-          className="max-w-[90%] md:max-w-[85%] px-6 py-5 md:px-8 md:py-6 rounded-3xl rounded-tr-lg bg-[hsl(200_70%_94%)] border border-[hsl(200_60%_85%)]"
+          className="max-w-[92%] md:max-w-[88%] px-6 py-5 md:px-8 md:py-6 rounded-3xl rounded-tr-lg bg-[hsl(200_70%_94%)] border border-[hsl(200_60%_85%)]"
         >
-          <p className="text-[hsl(43_70%_30%)] text-base md:text-lg leading-relaxed whitespace-pre-wrap">
+          <p className="text-[hsl(43_70%_30%)] text-lg md:text-xl leading-relaxed whitespace-pre-wrap">
             {content}
           </p>
         </div>
@@ -67,7 +67,7 @@ const ChatMessage = ({ role, content, isStreaming }: ChatMessageProps) => {
       transition={{ duration: 0.3 }}
       className="flex justify-start"
     >
-      <div className="flex items-start gap-4 max-w-[90%] md:max-w-[85%] group">
+      <div className="flex items-start gap-4 max-w-[92%] md:max-w-[88%] group">
         {/* Angel avatar */}
         <motion.div 
           className="relative shrink-0"
@@ -84,7 +84,7 @@ const ChatMessage = ({ role, content, isStreaming }: ChatMessageProps) => {
           <img
             src={angelHero}
             alt="Angel AI"
-            className="w-12 h-12 md:w-14 md:h-14 rounded-full object-cover border-2 border-[hsl(43_85%_60%/0.4)]"
+            className="w-14 h-14 md:w-16 md:h-16 rounded-full object-cover border-2 border-[hsl(43_85%_60%/0.4)]"
           />
         </motion.div>
         
@@ -97,7 +97,7 @@ const ChatMessage = ({ role, content, isStreaming }: ChatMessageProps) => {
             }}
           >
             {/* Markdown rendered content */}
-            <div className="text-[hsl(43_60%_25%)] text-base md:text-lg leading-relaxed prose prose-sm md:prose-base max-w-none prose-headings:text-[hsl(43_70%_30%)] prose-p:text-[hsl(43_60%_25%)] prose-strong:text-[hsl(43_70%_25%)] prose-ul:text-[hsl(43_60%_25%)] prose-ol:text-[hsl(43_60%_25%)] prose-li:text-[hsl(43_60%_25%)] prose-a:text-[hsl(43_85%_45%)] prose-a:no-underline hover:prose-a:underline prose-code:text-[hsl(43_70%_35%)] prose-code:bg-[hsl(43_40%_92%)] prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-pre:bg-[hsl(43_30%_95%)] prose-pre:border prose-pre:border-[hsl(43_40%_85%)]">
+            <div className="text-[hsl(43_60%_25%)] text-lg md:text-xl leading-relaxed prose prose-base md:prose-lg max-w-none prose-headings:text-[hsl(43_70%_30%)] prose-p:text-[hsl(43_60%_25%)] prose-strong:text-[hsl(43_70%_25%)] prose-ul:text-[hsl(43_60%_25%)] prose-ol:text-[hsl(43_60%_25%)] prose-li:text-[hsl(43_60%_25%)] prose-a:text-[hsl(43_85%_45%)] prose-a:no-underline hover:prose-a:underline prose-code:text-[hsl(43_70%_35%)] prose-code:bg-[hsl(43_40%_92%)] prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-pre:bg-[hsl(43_30%_95%)] prose-pre:border prose-pre:border-[hsl(43_40%_85%)]">
               <ReactMarkdown
                 components={{
                   // Custom renderers for better styling
