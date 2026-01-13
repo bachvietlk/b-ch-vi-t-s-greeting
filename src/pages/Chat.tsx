@@ -839,92 +839,94 @@ const Chat = () => {
           </div>
         </div>
 
-        {/* Ultra-clean Input Bar - Grok style with attachment inside */}
-        <div className="relative z-10 border-t border-[hsl(43_40%_90%)] bg-[hsl(45_40%_99%/0.95)] backdrop-blur-md px-4 md:px-8 py-4 md:py-5">
-          <form onSubmit={handleSubmit} className="max-w-5xl mx-auto">
+        {/* Ultra-clean Input Bar - Grok style full width */}
+        <div className="relative z-10 border-t border-[hsl(43_40%_90%)] bg-[hsl(45_40%_99%/0.95)] backdrop-blur-md px-3 md:px-6 py-4">
+          <form onSubmit={handleSubmit} className="w-full">
             {/* Attached Files Preview - Above input */}
             <AttachedFilesPreview 
               files={attachedFiles} 
               onRemove={(index) => setAttachedFiles(prev => prev.filter((_, i) => i !== index))}
             />
             
-            <div className="flex items-end gap-3">
-              {/* Input container with attach button inside - Grok style */}
-              <div 
-                className="flex-1 relative rounded-3xl overflow-hidden bg-white"
-                style={{
-                  boxShadow: "0 0 0 2px hsl(43 60% 80%), 0 6px 30px hsl(43 85% 50% / 0.12)"
-                }}
-              >
-                {/* Attach button inside input */}
-                <div className="absolute left-2 bottom-3 z-10">
-                  <ChatAttachButton 
-                    attachedFiles={attachedFiles}
-                    onFileAttached={(file) => setAttachedFiles(prev => [...prev, file])}
-                    onRemoveFile={(index) => setAttachedFiles(prev => prev.filter((_, i) => i !== index))}
-                  />
-                </div>
-                
-                <Textarea
-                  value={input}
-                  onChange={(e) => setInput(e.target.value)}
-                  placeholder="Hỏi Angel AI về tâm linh, FUN Ecosystem, 8 Mantras..."
-                  className="min-h-[56px] md:min-h-[64px] max-h-40 resize-none bg-transparent border-0 focus-visible:ring-0 focus-visible:ring-offset-0 rounded-3xl pl-12 pr-6 py-4 text-base md:text-lg text-[hsl(35_50%_20%)] placeholder:text-[hsl(35_30%_55%)]"
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter" && !e.shiftKey) {
-                      e.preventDefault();
-                      handleSubmit(e);
-                    }
-                  }}
+            {/* Single input container with all buttons inside - Grok style */}
+            <div 
+              className="relative rounded-3xl overflow-hidden bg-white"
+              style={{
+                boxShadow: "0 0 0 2px hsl(43 60% 80%), 0 6px 30px hsl(43 85% 50% / 0.12)"
+              }}
+            >
+              {/* Attach button - left side */}
+              <div className="absolute left-3 md:left-4 bottom-1/2 translate-y-1/2 z-10">
+                <ChatAttachButton 
+                  attachedFiles={attachedFiles}
+                  onFileAttached={(file) => setAttachedFiles(prev => [...prev, file])}
+                  onRemoveFile={(index) => setAttachedFiles(prev => prev.filter((_, i) => i !== index))}
                 />
               </div>
-
-              {/* Voice Chat button */}
-              <motion.div
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <Button
-                  type="button"
-                  size="icon"
-                  onClick={() => setVoiceChatOpen(true)}
-                  className="h-14 w-14 rounded-full bg-gradient-to-br from-[hsl(160_70%_45%)] to-[hsl(160_70%_35%)] hover:from-[hsl(160_70%_40%)] hover:to-[hsl(160_70%_30%)] text-white shadow-xl transition-all duration-200"
-                  title="Trò chuyện bằng giọng nói"
+              
+              {/* Text input */}
+              <Textarea
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                placeholder="Hỏi Angel AI về tâm linh, FUN Ecosystem, 8 Mantras..."
+                className="min-h-[64px] md:min-h-[72px] max-h-40 resize-none bg-transparent border-0 focus-visible:ring-0 focus-visible:ring-offset-0 rounded-3xl pl-14 md:pl-16 pr-28 md:pr-32 py-5 text-base md:text-lg text-[hsl(35_50%_20%)] placeholder:text-[hsl(35_30%_55%)]"
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" && !e.shiftKey) {
+                    e.preventDefault();
+                    handleSubmit(e);
+                  }
+                }}
+              />
+              
+              {/* Right side buttons - Voice + Send inside input */}
+              <div className="absolute right-2 md:right-3 bottom-1/2 translate-y-1/2 flex items-center gap-2">
+                {/* Voice Chat button */}
+                <motion.div
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
                 >
-                  <Mic className="w-6 h-6" />
-                </Button>
-              </motion.div>
+                  <Button
+                    type="button"
+                    size="icon"
+                    onClick={() => setVoiceChatOpen(true)}
+                    className="h-11 w-11 md:h-12 md:w-12 rounded-full bg-gradient-to-br from-[hsl(160_70%_45%)] to-[hsl(160_70%_35%)] hover:from-[hsl(160_70%_40%)] hover:to-[hsl(160_70%_30%)] text-white shadow-lg transition-all duration-200"
+                    title="Trò chuyện bằng giọng nói"
+                  >
+                    <Mic className="w-5 h-5 md:w-6 md:h-6" />
+                  </Button>
+                </motion.div>
 
-              {/* Send button with halo pulse */}
-              <motion.div
-                animate={input.trim() || attachedFiles.length > 0 ? {
-                  boxShadow: [
-                    "0 0 20px hsl(43 85% 50% / 0.4)",
-                    "0 0 40px hsl(43 85% 50% / 0.6)",
-                    "0 0 20px hsl(43 85% 50% / 0.4)",
-                  ]
-                } : {}}
-                transition={{ duration: 1.5, repeat: Infinity }}
-                style={{ borderRadius: "50%" }}
-              >
-                <Button
-                  type="submit"
-                  size="icon"
-                  disabled={(!input.trim() && attachedFiles.length === 0) || isLoading}
-                  className="h-14 w-14 rounded-full bg-gradient-to-br from-[hsl(43_85%_55%)] to-[hsl(43_85%_45%)] hover:from-[hsl(43_85%_50%)] hover:to-[hsl(43_85%_40%)] text-white shadow-xl disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
+                {/* Send button */}
+                <motion.div
+                  animate={input.trim() || attachedFiles.length > 0 ? {
+                    boxShadow: [
+                      "0 0 15px hsl(43 85% 50% / 0.4)",
+                      "0 0 25px hsl(43 85% 50% / 0.6)",
+                      "0 0 15px hsl(43 85% 50% / 0.4)",
+                    ]
+                  } : {}}
+                  transition={{ duration: 1.5, repeat: Infinity }}
+                  style={{ borderRadius: "50%" }}
                 >
-                  {isLoading ? (
-                    <motion.div
-                      animate={{ rotate: 360 }}
-                      transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                    >
-                      <Sparkles className="w-6 h-6" />
-                    </motion.div>
-                  ) : (
-                    <Send className="w-6 h-6" />
-                  )}
-                </Button>
-              </motion.div>
+                  <Button
+                    type="submit"
+                    size="icon"
+                    disabled={(!input.trim() && attachedFiles.length === 0) || isLoading}
+                    className="h-11 w-11 md:h-12 md:w-12 rounded-full bg-gradient-to-br from-[hsl(43_85%_55%)] to-[hsl(43_85%_45%)] hover:from-[hsl(43_85%_50%)] hover:to-[hsl(43_85%_40%)] text-white shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
+                  >
+                    {isLoading ? (
+                      <motion.div
+                        animate={{ rotate: 360 }}
+                        transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                      >
+                        <Sparkles className="w-5 h-5 md:w-6 md:h-6" />
+                      </motion.div>
+                    ) : (
+                      <Send className="w-5 h-5 md:w-6 md:h-6" />
+                    )}
+                  </Button>
+                </motion.div>
+              </div>
             </div>
           </form>
         </div>
